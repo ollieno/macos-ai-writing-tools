@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2026-03-21
+
+### Fixed
+- Remove baked-in border from app icon for clean macOS squircle rendering
+
 ## [1.1.0] - 2026-03-21
 
 ### Added
