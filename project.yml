@@ -1,0 +1,44 @@
+name: AiTools
+options:
+  bundleIdPrefix: com.aitools
+  deploymentTarget:
+    macOS: "14.0"
+  xcodeVersion: "16.0"
+targets:
+  AiTools:
+    type: application
+    platform: macOS
+    sources:
+      - AiTools
+    resources:
+      - Resources
+    settings:
+      base:
+        INFOPLIST_FILE: AiTools/Info.plist
+        PRODUCT_BUNDLE_IDENTIFIER: com.aitools.AiTools
+        MACOSX_DEPLOYMENT_TARGET: "14.0"
+        ENABLE_APP_SANDBOX: false
+        CODE_SIGN_IDENTITY: "-"
+        CODE_SIGN_STYLE: Manual
+    info:
+      path: AiTools/Info.plist
+      properties:
+        NSServices:
+          - NSMenuItem:
+              default: "Verwerk met AiTools"
+            NSMessage: processText
+            NSSendTypes:
+              - NSStringPboardType
+            NSReturnTypes:
+              - NSStringPboardType
+  AiToolsTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - AiToolsTests
+    dependencies:
+      - target: AiTools
+    settings:
+      base:
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AiTools.app/Contents/MacOS/AiTools"
+        BUNDLE_LOADER: "$(TEST_HOST)"

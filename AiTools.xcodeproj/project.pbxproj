@@ -1,0 +1,410 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A63089B2BE9F5ABDC015289 /* PromptLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA6D33904AEF6CC4F544310 /* PromptLibrary.swift */; };
+		114E452D0BA1AF8FE5CAC96B /* AiToolsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EB1DA2D00E685D22D4D24A /* AiToolsApp.swift */; };
+		A14EF501EABC312FD8B88075 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E2472AA6E43C7BB0AE8DF /* ServiceProvider.swift */; };
+		BA814AC17DA24B2EA1EA62B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814B574789B505527E23F04 /* AppDelegate.swift */; };
+		F7A2B97939ABDA9631D83687 /* AiToolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718D312F7D7D598C578D0FB9 /* AiToolsTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C5ECD45FE96EFD3D9F678CBC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 142742D2D638CA81764F6DED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BD3A9CCD9E5287F1AEF8BBED;
+			remoteInfo = AiTools;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0905F9B36A3E809DFF327778 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		718D312F7D7D598C578D0FB9 /* AiToolsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiToolsTests.swift; sourceTree = "<group>"; };
+		8B839A8E77982B656FD21529 /* AiToolsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AiToolsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9814B574789B505527E23F04 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		9AA6D33904AEF6CC4F544310 /* PromptLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptLibrary.swift; sourceTree = "<group>"; };
+		A0A16FAE23BFCBB8106B3443 /* AiTools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AiTools.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE5E2472AA6E43C7BB0AE8DF /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
+		F2EB1DA2D00E685D22D4D24A /* AiToolsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiToolsApp.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		062C1FA5FA2658020DABD2CE /* AiTools */ = {
+			isa = PBXGroup;
+			children = (
+				F2EB1DA2D00E685D22D4D24A /* AiToolsApp.swift */,
+				9814B574789B505527E23F04 /* AppDelegate.swift */,
+				0905F9B36A3E809DFF327778 /* Info.plist */,
+				BE5E2472AA6E43C7BB0AE8DF /* ServiceProvider.swift */,
+				5B1A06D57A20E51EF6DA20E8 /* Services */,
+			);
+			path = AiTools;
+			sourceTree = "<group>";
+		};
+		5001DEA74B911457AA4181D0 /* AiToolsTests */ = {
+			isa = PBXGroup;
+			children = (
+				718D312F7D7D598C578D0FB9 /* AiToolsTests.swift */,
+			);
+			path = AiToolsTests;
+			sourceTree = "<group>";
+		};
+		5B1A06D57A20E51EF6DA20E8 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9AA6D33904AEF6CC4F544310 /* PromptLibrary.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		7407F30FA19FEA3BE13BF9CE = {
+			isa = PBXGroup;
+			children = (
+				062C1FA5FA2658020DABD2CE /* AiTools */,
+				5001DEA74B911457AA4181D0 /* AiToolsTests */,
+				FDF1836C3B62697C550F391F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FDF1836C3B62697C550F391F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A0A16FAE23BFCBB8106B3443 /* AiTools.app */,
+				8B839A8E77982B656FD21529 /* AiToolsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B2D5413B74A708998331EC0B /* AiToolsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3EA3CB6A522B0EA27E27F7E9 /* Build configuration list for PBXNativeTarget "AiToolsTests" */;
+			buildPhases = (
+				18ADD5DD4BFA15A65205B1BC /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E3278BB4E84C3A5C957DA1AA /* PBXTargetDependency */,
+			);
+			name = AiToolsTests;
+			packageProductDependencies = (
+			);
+			productName = AiToolsTests;
+			productReference = 8B839A8E77982B656FD21529 /* AiToolsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		BD3A9CCD9E5287F1AEF8BBED /* AiTools */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 53FD4A855457584E5CE212D7 /* Build configuration list for PBXNativeTarget "AiTools" */;
+			buildPhases = (
+				5268021986547A69A713110B /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AiTools;
+			packageProductDependencies = (
+			);
+			productName = AiTools;
+			productReference = A0A16FAE23BFCBB8106B3443 /* AiTools.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		142742D2D638CA81764F6DED /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					BD3A9CCD9E5287F1AEF8BBED = {
+						ProvisioningStyle = Manual;
+					};
+				};
+			};
+			buildConfigurationList = 3649B5CFA6CE9666127C091E /* Build configuration list for PBXProject "AiTools" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 7407F30FA19FEA3BE13BF9CE;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = FDF1836C3B62697C550F391F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BD3A9CCD9E5287F1AEF8BBED /* AiTools */,
+				B2D5413B74A708998331EC0B /* AiToolsTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		18ADD5DD4BFA15A65205B1BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F7A2B97939ABDA9631D83687 /* AiToolsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5268021986547A69A713110B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				114E452D0BA1AF8FE5CAC96B /* AiToolsApp.swift in Sources */,
+				BA814AC17DA24B2EA1EA62B9 /* AppDelegate.swift in Sources */,
+				0A63089B2BE9F5ABDC015289 /* PromptLibrary.swift in Sources */,
+				A14EF501EABC312FD8B88075 /* ServiceProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E3278BB4E84C3A5C957DA1AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BD3A9CCD9E5287F1AEF8BBED /* AiTools */;
+			targetProxy = C5ECD45FE96EFD3D9F678CBC /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		15A9BBD5101A6D11978BE87E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				INFOPLIST_FILE = AiTools/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aitools.AiTools;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		2FC1CF89B04D72EF1E939C3C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		5DC3A51F1E9BCC5317EC0813 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aitools.AiToolsTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AiTools.app/Contents/MacOS/AiTools";
+			};
+			name = Debug;
+		};
+		6BE32090CF9C04B16815CA6F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.aitools.AiToolsTests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/AiTools.app/Contents/MacOS/AiTools";
+			};
+			name = Release;
+		};
+		885DA3829A4DDCBA4A37B758 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				INFOPLIST_FILE = AiTools/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aitools.AiTools;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		A1A6EF08482C963A44868E34 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3649B5CFA6CE9666127C091E /* Build configuration list for PBXProject "AiTools" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2FC1CF89B04D72EF1E939C3C /* Debug */,
+				A1A6EF08482C963A44868E34 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		3EA3CB6A522B0EA27E27F7E9 /* Build configuration list for PBXNativeTarget "AiToolsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5DC3A51F1E9BCC5317EC0813 /* Debug */,
+				6BE32090CF9C04B16815CA6F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		53FD4A855457584E5CE212D7 /* Build configuration list for PBXNativeTarget "AiTools" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				885DA3829A4DDCBA4A37B758 /* Debug */,
+				15A9BBD5101A6D11978BE87E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 142742D2D638CA81764F6DED /* Project object */;
+}
