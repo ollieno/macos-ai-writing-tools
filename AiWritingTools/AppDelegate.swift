@@ -5,6 +5,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let textProcessor = TextProcessor()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        let runningInstances = NSRunningApplication.runningApplications(withBundleIdentifier: Bundle.main.bundleIdentifier!)
+        if runningInstances.count > 1 {
+            NSApp.terminate(nil)
+            return
+        }
+
         let isFirstRun = !FileManager.default.fileExists(atPath: PromptLibrary.promptsDirectory.path)
 
         do {

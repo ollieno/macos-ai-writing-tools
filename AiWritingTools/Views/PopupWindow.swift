@@ -45,7 +45,7 @@ final class PopupWindow {
 
         let panel = NSPanel(
             contentRect: NSRect(x: 0, y: 0, width: width, height: height),
-            styleMask: [.nonactivatingPanel, .titled, .closable, .fullSizeContentView],
+            styleMask: [.nonactivatingPanel, .titled, .closable, .resizable, .fullSizeContentView],
             backing: .buffered,
             defer: false
         )
@@ -56,6 +56,7 @@ final class PopupWindow {
         panel.isMovableByWindowBackground = true
         panel.level = .floating
         panel.backgroundColor = .clear
+        panel.minSize = NSSize(width: 400, height: 300)
 
         var origin = NSEvent.mouseLocation
         let screenFrame = NSScreen.main?.visibleFrame ?? .zero

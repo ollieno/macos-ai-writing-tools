@@ -118,7 +118,7 @@ struct PopupContentView: View {
                 errorView(message: message)
             }
         }
-        .frame(width: 520)
+        .frame(minWidth: 400, maxWidth: .infinity)
         .background(.ultraThickMaterial)
     }
 
