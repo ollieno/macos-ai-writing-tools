@@ -1,5 +1,4 @@
 import AppKit
-import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     private let hotkeyManager = HotkeyManager()

@@ -36,15 +36,17 @@ final class TextProcessor {
                 }
             },
             onComplete: { [weak self] result in
-                self?.popup.dismiss()
+                DispatchQueue.main.async {
+                    self?.popup.dismiss()
 
-                if let result {
-                    sourceApp?.activate()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                        TextAccessor.pasteText(result)
+                    if let result {
+                        sourceApp?.activate()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                            TextAccessor.pasteText(result)
+                        }
+                    } else {
+                        sourceApp?.activate()
                     }
-                } else {
-                    sourceApp?.activate()
                 }
             }
         )

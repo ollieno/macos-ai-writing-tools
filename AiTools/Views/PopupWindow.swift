@@ -22,7 +22,9 @@ final class PopupWindow {
             selectedText: text,
             onAction: { composedPrompt in
                 let result = await onAction(composedPrompt)
-                onComplete(result)
+                await MainActor.run {
+                    onComplete(result)
+                }
             },
             onDismiss: { [weak self] in
                 self?.dismiss()
