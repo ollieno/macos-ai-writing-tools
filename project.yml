@@ -1,4 +1,4 @@
-name: AiTools
+name: AI Writing Tools
 options:
   bundleIdPrefix: com.aitools
   deploymentTarget:
@@ -15,6 +15,7 @@ targets:
     settings:
       base:
         INFOPLIST_FILE: AiTools/Info.plist
+        PRODUCT_NAME: AI Writing Tools
         PRODUCT_BUNDLE_IDENTIFIER: com.aitools.AiTools
         MACOSX_DEPLOYMENT_TARGET: "14.0"
         ENABLE_APP_SANDBOX: false
@@ -24,7 +25,7 @@ targets:
       path: AiTools/Info.plist
       properties:
         NSPrincipalClass: NSApplication
-        NSAccessibilityUsageDescription: "AiTools heeft Accessibility-toegang nodig om geselecteerde tekst te lezen en resultaten te plakken."
+        NSAccessibilityUsageDescription: "AI Writing Tools heeft Accessibility-toegang nodig om geselecteerde tekst te lezen en resultaten te plakken."
   AiToolsTests:
     type: bundle.unit-test
     platform: macOS
@@ -34,7 +35,7 @@ targets:
       - target: AiTools
     settings:
       base:
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AiTools.app/Contents/MacOS/AiTools"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AI Writing Tools.app/Contents/MacOS/AI Writing Tools"
         BUNDLE_LOADER: "$(TEST_HOST)"
         GENERATE_INFOPLIST_FILE: YES
         PRODUCT_BUNDLE_IDENTIFIER: com.aitools.AiToolsTests

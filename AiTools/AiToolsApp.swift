@@ -5,7 +5,7 @@ struct AiToolsApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {
-        MenuBarExtra("AiTools", systemImage: "text.bubble") {
+        MenuBarExtra("AI Writing Tools", systemImage: "text.bubble") {
             Text("Cmd+Shift+A om tekst te verwerken")
                 .font(.caption)
                 .foregroundColor(.secondary)
@@ -14,7 +14,7 @@ struct AiToolsApp: App {
                 NSWorkspace.shared.open(PromptLibrary.promptsDirectory)
             }
             Divider()
-            Button("Stop AiTools") {
+            Button("Stop AI Writing Tools") {
                 NSApplication.shared.terminate(nil)
             }
         }

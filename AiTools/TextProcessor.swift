@@ -36,19 +36,19 @@ final class TextProcessor {
                     return nil
                 }
             },
-            onComplete: { [weak self] result in
-                DispatchQueue.main.async {
-                    self?.popup.dismiss()
-
-                    if let result {
-                        sourceApp?.activate()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                            TextAccessor.pasteText(result)
-                        }
-                    } else {
-                        sourceApp?.activate()
-                    }
+            onReplace: { result in
+                sourceApp?.activate()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                    TextAccessor.pasteText(result)
                 }
+            },
+            onCopy: { result in
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(result, forType: .string)
+                sourceApp?.activate()
+            },
+            onCancel: {
+                sourceApp?.activate()
             }
         )
     }
@@ -65,7 +65,7 @@ final class TextProcessor {
         }
 
         let alert = NSAlert()
-        alert.messageText = "AiTools"
+        alert.messageText = "AI Writing Tools"
         alert.informativeText = message
         alert.alertStyle = .warning
         alert.runModal()

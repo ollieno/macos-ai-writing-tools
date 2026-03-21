@@ -34,8 +34,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func showWelcome() {
         let alert = NSAlert()
-        alert.messageText = "Welkom bij AiTools"
-        alert.informativeText = "AiTools is nu klaar voor gebruik!\n\nDruk op Cmd+Shift+A om geselecteerde tekst te verwerken met AI.\n\nZorg dat Accessibility-toegang is ingeschakeld in Systeeminstellingen > Privacy en beveiliging > Toegankelijkheid.\n\nJe prompts staan in:\n~/Library/Application Support/AiTools/prompts/"
+        alert.messageText = "Welkom bij AI Writing Tools"
+        alert.informativeText = "AI Writing Tools is nu klaar voor gebruik!\n\nDruk op Cmd+Shift+A om geselecteerde tekst te verwerken met AI.\n\nZorg dat Accessibility-toegang is ingeschakeld in Systeeminstellingen > Privacy en beveiliging > Toegankelijkheid.\n\nJe prompts staan in:\n~/Library/Application Support/AiTools/prompts/"
         alert.alertStyle = .informational
         alert.addButton(withTitle: "Begrepen")
         alert.addButton(withTitle: "Open Prompts Map")

@@ -1,9 +1,95 @@
+import AppKit
 import SwiftUI
+
+private struct WindowDragArea: NSViewRepresentable {
+    func makeNSView(context: Context) -> NSView {
+        let view = DragView()
+        return view
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {}
+
+    private class DragView: NSView {
+        override func mouseDown(with event: NSEvent) {
+            window?.performDrag(with: event)
+        }
+    }
+}
+
+private struct SubmitTextEditor: NSViewRepresentable {
+    @Binding var text: String
+    var onSubmit: () -> Void
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(text: $text, onSubmit: onSubmit)
+    }
+
+    func makeNSView(context: Context) -> NSScrollView {
+        let scrollView = NSScrollView()
+        let textView = SubmitTextView()
+        textView.delegate = context.coordinator
+        textView.submitHandler = onSubmit
+        textView.font = NSFont.systemFont(ofSize: 13)
+        textView.isRichText = false
+        textView.isAutomaticQuoteSubstitutionEnabled = false
+        textView.isAutomaticDashSubstitutionEnabled = false
+        textView.isAutomaticTextReplacementEnabled = false
+        textView.drawsBackground = false
+        textView.textContainerInset = NSSize(width: 4, height: 6)
+        textView.textContainer?.widthTracksTextView = true
+        textView.isVerticallyResizable = true
+        textView.isHorizontallyResizable = false
+
+        scrollView.documentView = textView
+        scrollView.hasVerticalScroller = true
+        scrollView.hasHorizontalScroller = false
+        scrollView.drawsBackground = false
+        scrollView.borderType = .noBorder
+
+        return scrollView
+    }
+
+    func updateNSView(_ scrollView: NSScrollView, context: Context) {
+        guard let textView = scrollView.documentView as? NSTextView else { return }
+        if textView.string != text {
+            textView.string = text
+        }
+    }
+
+    class Coordinator: NSObject, NSTextViewDelegate {
+        var text: Binding<String>
+        var onSubmit: () -> Void
+
+        init(text: Binding<String>, onSubmit: @escaping () -> Void) {
+            self.text = text
+            self.onSubmit = onSubmit
+        }
+
+        func textDidChange(_ notification: Notification) {
+            guard let textView = notification.object as? NSTextView else { return }
+            text.wrappedValue = textView.string
+        }
+    }
+
+    private class SubmitTextView: NSTextView {
+        var submitHandler: (() -> Void)?
+
+        override func keyDown(with event: NSEvent) {
+            if event.keyCode == 36 && !event.modifierFlags.contains(.shift) {
+                submitHandler?()
+                return
+            }
+            super.keyDown(with: event)
+        }
+    }
+}
 
 struct PopupContentView: View {
     let categories: [PromptCategory]
     let selectedText: String
-    let onAction: (String) async -> Void
+    let onAction: (String) async -> String?
+    let onReplace: (String) -> Void
+    let onCopy: (String) -> Void
     let onDismiss: () -> Void
 
     @State private var freeformText = ""
@@ -11,23 +97,28 @@ struct PopupContentView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("AiTools")
+            Text("AI Writing Tools")
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundColor(.secondary)
                 .textCase(.uppercase)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 16)
                 .padding(.top, 16)
                 .padding(.bottom, 12)
+                .background(WindowDragArea())
 
-            if case .processing = state {
-                processingView
-            } else if case .error(let message) = state {
-                errorView(message: message)
-            } else {
+            switch state {
+            case .idle:
                 actionsView
+            case .processing:
+                processingView
+            case .success(let result):
+                previewView(result: result)
+            case .error(let message):
+                errorView(message: message)
             }
         }
-        .frame(width: 320)
+        .frame(width: 520)
         .background(.ultraThickMaterial)
     }
 
@@ -71,23 +162,12 @@ struct PopupContentView: View {
                         .font(.system(size: 11))
                         .foregroundColor(Color(NSColor.secondaryLabelColor))
 
-                    HStack(spacing: 6) {
-                        TextField("Typ je instructie...", text: $freeformText)
-                            .textFieldStyle(.plain)
-                            .font(.system(size: 13))
-                            .padding(8)
-                            .background(Color.primary.opacity(0.05))
-                            .cornerRadius(6)
-                            .onSubmit {
-                                submitFreeform()
-                            }
-
-                        Button("Ga") {
-                            submitFreeform()
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(freeformText.trimmingCharacters(in: .whitespaces).isEmpty)
+                    SubmitTextEditor(text: $freeformText) {
+                        submitFreeform()
                     }
+                    .background(Color.primary.opacity(0.05))
+                    .cornerRadius(6)
+                    .frame(height: 80)
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
@@ -104,6 +184,50 @@ struct PopupContentView: View {
                 .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, minHeight: 200)
+    }
+
+    private func previewView(result: String) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Resultaat")
+                .font(.system(size: 11))
+                .foregroundColor(Color(NSColor.tertiaryLabelColor))
+                .textCase(.uppercase)
+                .padding(.horizontal, 16)
+                .padding(.top, 4)
+                .padding(.bottom, 8)
+
+            ScrollView {
+                Text(result)
+                    .font(.system(size: 13))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(12)
+                    .textSelection(.enabled)
+            }
+            .background(Color.primary.opacity(0.05))
+            .cornerRadius(6)
+            .padding(.horizontal, 12)
+
+            HStack(spacing: 10) {
+                Button("Terug") {
+                    state = .idle
+                }
+                .buttonStyle(.bordered)
+
+                Spacer()
+
+                Button("Kopieer") {
+                    onCopy(result)
+                }
+                .buttonStyle(.bordered)
+
+                Button("Vervang") {
+                    onReplace(result)
+                }
+                .buttonStyle(.borderedProminent)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+        }
     }
 
     private func errorView(message: String) -> some View {
@@ -133,7 +257,15 @@ struct PopupContentView: View {
     private func executeAction(prompt: String) {
         state = .processing
         Task {
-            await onAction(prompt)
+            if let result = await onAction(prompt) {
+                await MainActor.run {
+                    state = .success(result)
+                }
+            } else {
+                await MainActor.run {
+                    state = .idle
+                }
+            }
         }
     }
 }

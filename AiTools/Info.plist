@@ -19,7 +19,7 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSAccessibilityUsageDescription</key>
-	<string>AiTools heeft Accessibility-toegang nodig om geselecteerde tekst te lezen en resultaten te plakken.</string>
+	<string>AI Writing Tools heeft Accessibility-toegang nodig om geselecteerde tekst te lezen en resultaten te plakken.</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 </dict>
