@@ -23,14 +23,8 @@ targets:
     info:
       path: AiTools/Info.plist
       properties:
-        NSServices:
-          - NSMenuItem:
-              default: "Verwerk met AiTools"
-            NSMessage: processText
-            NSSendTypes:
-              - NSStringPboardType
-            NSReturnTypes:
-              - NSStringPboardType
+        NSPrincipalClass: NSApplication
+        NSAccessibilityUsageDescription: "AiTools heeft Accessibility-toegang nodig om geselecteerde tekst te lezen en resultaten te plakken."
   AiToolsTests:
     type: bundle.unit-test
     platform: macOS

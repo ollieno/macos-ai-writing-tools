@@ -1,24 +1,26 @@
 import AppKit
-import UserNotifications
 
-class ServiceProvider: NSObject {
+final class TextProcessor {
     private let popup = PopupWindow()
     private let bridge = ClaudeCodeBridge()
 
-    @objc func processText(
-        _ pboard: NSPasteboard,
-        userData: String?,
-        error: AutoreleasingUnsafeMutablePointer<NSString?>
-    ) {
-        guard let text = pboard.string(forType: .string) else { return }
+    func processSelectedText() {
+        guard TextAccessor.isAccessibilityGranted() else {
+            _ = TextAccessor.ensureAccessibilityPermission()
+            return
+        }
+
+        let sourceApp = NSWorkspace.shared.frontmostApplication
+
+        guard let selectedText = TextAccessor.getSelectedText(), !selectedText.isEmpty else {
+            return
+        }
 
         let library = PromptLibrary()
         let categories = library.loadCategories()
 
-        let sourceApp = NSWorkspace.shared.frontmostApplication
-
         popup.show(
-            text: text,
+            text: selectedText,
             categories: categories,
             onAction: { [weak self] prompt in
                 guard let self else { return nil }
@@ -37,28 +39,15 @@ class ServiceProvider: NSObject {
                 self?.popup.dismiss()
 
                 if let result {
-                    pboard.clearContents()
-                    let written = pboard.setString(result, forType: .string)
-
-                    if !written {
-                        let systemPboard = NSPasteboard.general
-                        systemPboard.clearContents()
-                        systemPboard.setString(result, forType: .string)
-                        self?.sendNotification("Resultaat gekopieerd naar klembord")
+                    sourceApp?.activate()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                        TextAccessor.pasteText(result)
                     }
+                } else {
+                    sourceApp?.activate()
                 }
-
-                sourceApp?.activate()
             }
         )
-    }
-
-    private func sendNotification(_ message: String) {
-        let content = UNMutableNotificationContent()
-        content.title = "AiTools"
-        content.body = message
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-        UNUserNotificationCenter.current().add(request)
     }
 
     private func showError(_ error: ClaudeCodeBridge.BridgeError) {

@@ -2,7 +2,8 @@ import AppKit
 import UserNotifications
 
 class AppDelegate: NSObject, NSApplicationDelegate {
-    let serviceProvider = ServiceProvider()
+    private let hotkeyManager = HotkeyManager()
+    let textProcessor = TextProcessor()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         let isFirstRun = !FileManager.default.fileExists(atPath: PromptLibrary.promptsDirectory.path)
@@ -13,20 +14,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             NSLog("Failed to seed prompts: \(error)")
         }
 
-        NSApplication.shared.servicesProvider = serviceProvider
-        NSUpdateDynamicServices()
+        // Check accessibility permission
+        if !TextAccessor.isAccessibilityGranted() {
+            _ = TextAccessor.ensureAccessibilityPermission()
+        }
 
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert]) { _, _ in }
+        // Register global hotkey: Cmd+Shift+A
+        hotkeyManager.register { [weak self] in
+            self?.textProcessor.processSelectedText()
+        }
 
         if isFirstRun {
             showWelcome()
         }
     }
 
+    func applicationWillTerminate(_ notification: Notification) {
+        hotkeyManager.unregister()
+    }
+
     private func showWelcome() {
         let alert = NSAlert()
         alert.messageText = "Welkom bij AiTools"
-        alert.informativeText = "AiTools is nu beschikbaar via het Services-menu.\n\nSelecteer tekst in een willekeurige app, klik met de rechtermuisknop, en kies Services > \"Verwerk met AiTools\".\n\nJe prompts staan in:\n~/Library/Application Support/AiTools/prompts/"
+        alert.informativeText = "AiTools is nu klaar voor gebruik!\n\nDruk op Cmd+Shift+A om geselecteerde tekst te verwerken met AI.\n\nZorg dat Accessibility-toegang is ingeschakeld in Systeeminstellingen > Privacy en beveiliging > Toegankelijkheid.\n\nJe prompts staan in:\n~/Library/Application Support/AiTools/prompts/"
         alert.alertStyle = .informational
         alert.addButton(withTitle: "Begrepen")
         alert.addButton(withTitle: "Open Prompts Map")

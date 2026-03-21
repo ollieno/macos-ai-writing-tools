@@ -18,25 +18,9 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
-	<key>NSServices</key>
-	<array>
-		<dict>
-			<key>NSMenuItem</key>
-			<dict>
-				<key>default</key>
-				<string>Verwerk met AiTools</string>
-			</dict>
-			<key>NSMessage</key>
-			<string>processText</string>
-			<key>NSReturnTypes</key>
-			<array>
-				<string>NSStringPboardType</string>
-			</array>
-			<key>NSSendTypes</key>
-			<array>
-				<string>NSStringPboardType</string>
-			</array>
-		</dict>
-	</array>
+	<key>NSAccessibilityUsageDescription</key>
+	<string>AiTools heeft Accessibility-toegang nodig om geselecteerde tekst te lezen en resultaten te plakken.</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
 </dict>
 </plist>
