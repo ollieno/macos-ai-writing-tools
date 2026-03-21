@@ -8,7 +8,7 @@ struct PromptLibrary {
     }
 
     private let directory: URL
-    private let logger = Logger(subsystem: "com.aitools.AiWritingTools", category: "PromptLibrary")
+    private let logger = Logger(subsystem: "ai.amihuman.macos.AiWritingTools", category: "PromptLibrary")
 
     init(directory: URL? = nil) {
         self.directory = directory ?? Self.promptsDirectory

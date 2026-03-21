@@ -1,6 +1,6 @@
 name: AI Writing Tools
 options:
-  bundleIdPrefix: com.aitools
+  bundleIdPrefix: ai.amihuman.macos
   deploymentTarget:
     macOS: "14.0"
   xcodeVersion: "16.0"
@@ -17,7 +17,7 @@ targets:
         INFOPLIST_FILE: AiWritingTools/Info.plist
         PRODUCT_NAME: AI Writing Tools
         PRODUCT_MODULE_NAME: AiWritingTools
-        PRODUCT_BUNDLE_IDENTIFIER: com.aitools.AiWritingTools
+        PRODUCT_BUNDLE_IDENTIFIER: ai.amihuman.macos.AiWritingTools
         MACOSX_DEPLOYMENT_TARGET: "14.0"
         ENABLE_APP_SANDBOX: false
         CODE_SIGN_IDENTITY: "-"
@@ -40,4 +40,4 @@ targets:
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AI Writing Tools.app/Contents/MacOS/AI Writing Tools"
         BUNDLE_LOADER: "$(TEST_HOST)"
         GENERATE_INFOPLIST_FILE: YES
-        PRODUCT_BUNDLE_IDENTIFIER: com.aitools.AiWritingToolsTests
+        PRODUCT_BUNDLE_IDENTIFIER: ai.amihuman.macos.AiWritingToolsTests
