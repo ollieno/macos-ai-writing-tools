@@ -10,9 +10,12 @@
 		0A63089B2BE9F5ABDC015289 /* PromptLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA6D33904AEF6CC4F544310 /* PromptLibrary.swift */; };
 		114E452D0BA1AF8FE5CAC96B /* AiToolsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2EB1DA2D00E685D22D4D24A /* AiToolsApp.swift */; };
 		1D6F2014D644EED40F9CB49B /* PromptCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF75AC342DC12C7453872BBC /* PromptCategory.swift */; };
+		606EE602B38B0864095E5A51 /* SeedPrompts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CAF24431042EE57B27404E1 /* SeedPrompts.swift */; };
+		9B21CD616E0071B3D6E689DE /* PromptLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8606E403C3E9B72F24CD7301 /* PromptLibraryTests.swift */; };
 		A14EF501EABC312FD8B88075 /* ServiceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE5E2472AA6E43C7BB0AE8DF /* ServiceProvider.swift */; };
 		ABDC79BCABBE88378208CE8B /* PromptAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C55763BF5F93A53E80E34F9 /* PromptAction.swift */; };
 		BA814AC17DA24B2EA1EA62B9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9814B574789B505527E23F04 /* AppDelegate.swift */; };
+		E6B3049E4D2A7BAC810319C7 /* SeedPromptsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7588C65B18C2CE9A346CF2 /* SeedPromptsTests.swift */; };
 		EEB67CD6FB776E94342C31F0 /* ProcessingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06A8EBD52F69D182E76870C8 /* ProcessingState.swift */; };
 		F7A2B97939ABDA9631D83687 /* AiToolsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 718D312F7D7D598C578D0FB9 /* AiToolsTests.swift */; };
 		FEE19EDF9D94D99FFC7FC372 /* PromptActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF133F529C70C31449F5DC6 /* PromptActionTests.swift */; };
@@ -31,9 +34,12 @@
 /* Begin PBXFileReference section */
 		06A8EBD52F69D182E76870C8 /* ProcessingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingState.swift; sourceTree = "<group>"; };
 		0905F9B36A3E809DFF327778 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		3E7588C65B18C2CE9A346CF2 /* SeedPromptsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedPromptsTests.swift; sourceTree = "<group>"; };
+		4CAF24431042EE57B27404E1 /* SeedPrompts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedPrompts.swift; sourceTree = "<group>"; };
 		4FF133F529C70C31449F5DC6 /* PromptActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptActionTests.swift; sourceTree = "<group>"; };
 		6C55763BF5F93A53E80E34F9 /* PromptAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptAction.swift; sourceTree = "<group>"; };
 		718D312F7D7D598C578D0FB9 /* AiToolsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AiToolsTests.swift; sourceTree = "<group>"; };
+		8606E403C3E9B72F24CD7301 /* PromptLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptLibraryTests.swift; sourceTree = "<group>"; };
 		8B839A8E77982B656FD21529 /* AiToolsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AiToolsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9814B574789B505527E23F04 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9AA6D33904AEF6CC4F544310 /* PromptLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptLibrary.swift; sourceTree = "<group>"; };
@@ -62,6 +68,8 @@
 			children = (
 				718D312F7D7D598C578D0FB9 /* AiToolsTests.swift */,
 				4FF133F529C70C31449F5DC6 /* PromptActionTests.swift */,
+				8606E403C3E9B72F24CD7301 /* PromptLibraryTests.swift */,
+				3E7588C65B18C2CE9A346CF2 /* SeedPromptsTests.swift */,
 			);
 			path = AiToolsTests;
 			sourceTree = "<group>";
@@ -70,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				9AA6D33904AEF6CC4F544310 /* PromptLibrary.swift */,
+				4CAF24431042EE57B27404E1 /* SeedPrompts.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -181,6 +190,8 @@
 			files = (
 				F7A2B97939ABDA9631D83687 /* AiToolsTests.swift in Sources */,
 				FEE19EDF9D94D99FFC7FC372 /* PromptActionTests.swift in Sources */,
+				9B21CD616E0071B3D6E689DE /* PromptLibraryTests.swift in Sources */,
+				E6B3049E4D2A7BAC810319C7 /* SeedPromptsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,6 +205,7 @@
 				ABDC79BCABBE88378208CE8B /* PromptAction.swift in Sources */,
 				1D6F2014D644EED40F9CB49B /* PromptCategory.swift in Sources */,
 				0A63089B2BE9F5ABDC015289 /* PromptLibrary.swift in Sources */,
+				606EE602B38B0864095E5A51 /* SeedPrompts.swift in Sources */,
 				A14EF501EABC312FD8B88075 /* ServiceProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
