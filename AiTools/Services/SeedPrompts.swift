@@ -4,16 +4,15 @@ struct SeedPrompts {
     static func installIfNeeded(to directory: URL) throws {
         let fm = FileManager.default
 
-        if fm.fileExists(atPath: directory.path) {
-            return
+        if !fm.fileExists(atPath: directory.path) {
+            if let bundledURL = Bundle.main.url(forResource: "DefaultPrompts", withExtension: nil) {
+                try fm.copyItem(at: bundledURL, to: directory)
+            } else {
+                try installFromCode(to: directory, fileManager: fm)
+            }
         }
 
-        guard let bundledURL = Bundle.main.url(forResource: "DefaultPrompts", withExtension: nil) else {
-            try installFromCode(to: directory, fileManager: fm)
-            return
-        }
-
-        try fm.copyItem(at: bundledURL, to: directory)
+        seedSystemPrompt(to: directory, fileManager: fm)
     }
 
     private static func installFromCode(to directory: URL, fileManager fm: FileManager) throws {
@@ -40,5 +39,18 @@ struct SeedPrompts {
             let file = catDir.appendingPathComponent("\(prompt.name).md")
             try prompt.content.write(to: file, atomically: true, encoding: .utf8)
         }
+    }
+
+    private static let systemPromptContent = """
+        Je bent een tekstverwerkingstool. Geef ALLEEN het gevraagde resultaat terug.
+        Geen inleiding, geen afsluiting, geen uitleg, geen begeleidende tekst.
+        Niet beginnen met zinnen als "Hier is..." of "Dit is de...".
+        Alleen het directe antwoord op de instructie, niets meer.
+        """
+
+    private static func seedSystemPrompt(to directory: URL, fileManager fm: FileManager) {
+        let file = directory.appendingPathComponent("_system.md")
+        guard !fm.fileExists(atPath: file.path) else { return }
+        try? systemPromptContent.write(to: file, atomically: true, encoding: .utf8)
     }
 }

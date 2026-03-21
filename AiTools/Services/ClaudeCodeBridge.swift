@@ -17,7 +17,7 @@ final class ClaudeCodeBridge {
         self.timeout = timeout
     }
 
-    func run(prompt: String) async throws -> String {
+    func run(prompt: String, systemPrompt: String? = nil) async throws -> String {
         guard FileManager.default.fileExists(atPath: binaryPath) else {
             throw BridgeError.binaryNotFound
         }
@@ -27,7 +27,11 @@ final class ClaudeCodeBridge {
             process.executableURL = URL(fileURLWithPath: binaryPath)
 
             if binaryPath.hasSuffix("claude") {
-                process.arguments = ["-p"]
+                var args = ["-p"]
+                if let systemPrompt, !systemPrompt.isEmpty {
+                    args += ["--system-prompt", systemPrompt]
+                }
+                process.arguments = args
             } else if !prompt.contains(" ") && !prompt.contains("\n") {
                 // For non-claude binaries, pass single-token prompts as CLI arguments
                 // so utilities like sleep receive their required positional argument.

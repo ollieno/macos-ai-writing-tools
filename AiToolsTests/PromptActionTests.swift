@@ -33,6 +33,6 @@ final class PromptActionTests: XCTestCase {
             instruction: "Make it funny",
             text: "Hello world"
         )
-        XCTAssertEqual(result, "Make it funny\n\nHello world")
+        XCTAssertEqual(result, "Make it funny\nGeef alleen het resultaat terug, zonder uitleg.\n\nHello world")
     }
 }

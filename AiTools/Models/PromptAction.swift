@@ -11,6 +11,6 @@ struct PromptAction: Identifiable {
     }
 
     static func composeFreeformPrompt(instruction: String, text: String) -> String {
-        "\(instruction)\n\n\(text)"
+        "\(instruction)\nGeef alleen het resultaat terug, zonder uitleg.\n\n\(text)"
     }
 }

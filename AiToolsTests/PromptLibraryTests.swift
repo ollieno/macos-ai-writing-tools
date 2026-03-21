@@ -86,4 +86,24 @@ final class PromptLibraryTests: XCTestCase {
         let categories = library.loadCategories()
         XCTAssertTrue(categories.isEmpty)
     }
+
+    func testLoadSystemPrompt() {
+        let content = "Je bent een assistent. Geef alleen het resultaat."
+        try! content.write(to: tempDir.appendingPathComponent("_system.md"), atomically: true, encoding: .utf8)
+
+        let library = PromptLibrary(directory: tempDir)
+        XCTAssertEqual(library.loadSystemPrompt(), content)
+    }
+
+    func testLoadSystemPromptReturnsNilWhenMissing() {
+        let library = PromptLibrary(directory: tempDir)
+        XCTAssertNil(library.loadSystemPrompt())
+    }
+
+    func testLoadSystemPromptReturnsNilWhenEmpty() {
+        try! "  \n  ".write(to: tempDir.appendingPathComponent("_system.md"), atomically: true, encoding: .utf8)
+
+        let library = PromptLibrary(directory: tempDir)
+        XCTAssertNil(library.loadSystemPrompt())
+    }
 }

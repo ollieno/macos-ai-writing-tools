@@ -14,6 +14,15 @@ struct PromptLibrary {
         self.directory = directory ?? Self.promptsDirectory
     }
 
+    func loadSystemPrompt() -> String? {
+        let file = directory.appendingPathComponent("_system.md")
+        guard let content = try? String(contentsOf: file, encoding: .utf8),
+              !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            return nil
+        }
+        return content.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     func loadCategories() -> [PromptCategory] {
         let fm = FileManager.default
         guard let contents = try? fm.contentsOfDirectory(

@@ -18,6 +18,7 @@ final class TextProcessor {
 
         let library = PromptLibrary()
         let categories = library.loadCategories()
+        let systemPrompt = library.loadSystemPrompt()
 
         popup.show(
             text: selectedText,
@@ -25,7 +26,7 @@ final class TextProcessor {
             onAction: { [weak self] prompt in
                 guard let self else { return nil }
                 do {
-                    return try await self.bridge.run(prompt: prompt)
+                    return try await self.bridge.run(prompt: prompt, systemPrompt: systemPrompt)
                 } catch let bridgeError as ClaudeCodeBridge.BridgeError {
                     await MainActor.run {
                         self.showError(bridgeError)
