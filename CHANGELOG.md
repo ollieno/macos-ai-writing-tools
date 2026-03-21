@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.2] - 2026-03-21
+
+### Fixed
+- Prevent macOS permission dialogs (Photos, Music, Downloads) during Claude binary discovery
+- Improve Claude binary discovery with ~/.local/bin and interactive shell lookup
+
+### Changed
+- Update bundle identifier to ai.amihuman.macos
+- Make popup window resizable in both directions
+- Prevent duplicate app instances from running
+
 ## [1.1.1] - 2026-03-21
 
 ### Fixed
