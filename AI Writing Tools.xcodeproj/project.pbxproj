@@ -14,6 +14,7 @@
 		43B8401C93D83D1B5BB29383 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A0F579989337F6A299A4 /* AppDelegate.swift */; };
 		4689740A064C1C2B2ECD2CB6 /* ClaudeCodeBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A17916928EC8C5C9FC5FF5 /* ClaudeCodeBridge.swift */; };
 		4BC8ACD1F9BF27AF6C778FCA /* PromptAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7380664540B1C21166B3305 /* PromptAction.swift */; };
+		5DD9B9C3C8664EFC1540C2A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B9CDE6915F1757B6845799E5 /* Assets.xcassets */; };
 		66DDD62A0771C55DBCD04594 /* SeedPromptsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39B851ED62F2090A77044E5B /* SeedPromptsTests.swift */; };
 		6991FF6BBC0D0C9800FA959F /* PromptLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEAAA2A616A55E4244969E4 /* PromptLibrary.swift */; };
 		6DB05ABB4F0FEAF77902E3C5 /* HotkeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB0919DB1E581E65A259722 /* HotkeyManager.swift */; };
@@ -55,6 +56,7 @@
 		8D39DE65764BB19B95ACB181 /* ClaudeCodeBridgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeCodeBridgeTests.swift; sourceTree = "<group>"; };
 		935F59E041CF0AFB97B44991 /* PromptActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptActionTests.swift; sourceTree = "<group>"; };
 		A7380664540B1C21166B3305 /* PromptAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptAction.swift; sourceTree = "<group>"; };
+		B9CDE6915F1757B6845799E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BDCB5E5047B0FC55268B6354 /* ProcessingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingState.swift; sourceTree = "<group>"; };
 		C8A17916928EC8C5C9FC5FF5 /* ClaudeCodeBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeCodeBridge.swift; sourceTree = "<group>"; };
 		D12543D908AE5514A2AAF9D6 /* PromptLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptLibraryTests.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			children = (
 				20D72B5B0529C1E5C66CBC47 /* AiWritingToolsApp.swift */,
 				4737A0F579989337F6A299A4 /* AppDelegate.swift */,
+				B9CDE6915F1757B6845799E5 /* Assets.xcassets */,
 				E9D33EFBF364C7EE641AFFC4 /* Info.plist */,
 				3DA7B4215319069B35554D77 /* TextProcessor.swift */,
 				C37BCC4A5625A8599C2A0A48 /* Models */,
@@ -166,6 +169,7 @@
 			buildConfigurationList = 42AA061263ACC4CE2AD473C4 /* Build configuration list for PBXNativeTarget "AiWritingTools" */;
 			buildPhases = (
 				DAB117E801C3DC4C00A902D9 /* Sources */,
+				E44A3C3815779B14DAAA5658 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -211,6 +215,17 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E44A3C3815779B14DAAA5658 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5DD9B9C3C8664EFC1540C2A1 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0459F2C7DFE5339110DD6C9E /* Sources */ = {
