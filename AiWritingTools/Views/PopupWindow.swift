@@ -12,7 +12,9 @@ final class PopupWindow {
         text: String,
         categories: [PromptCategory],
         onAction: @escaping (String) async -> String?,
-        onComplete: @escaping (String?) -> Void
+        onReplace: @escaping (String) -> Void,
+        onCopy: @escaping (String) -> Void,
+        onCancel: @escaping () -> Void
     ) {
         guard !isActive else { return }
         isActive = true
@@ -20,23 +22,29 @@ final class PopupWindow {
         let contentView = PopupContentView(
             categories: categories,
             selectedText: text,
-            onAction: { composedPrompt in
-                let result = await onAction(composedPrompt)
-                await MainActor.run {
-                    onComplete(result)
-                }
+            onAction: onAction,
+            onReplace: { [weak self] result in
+                self?.dismiss()
+                onReplace(result)
+            },
+            onCopy: { [weak self] result in
+                self?.dismiss()
+                onCopy(result)
             },
             onDismiss: { [weak self] in
                 self?.dismiss()
-                onComplete(nil)
+                onCancel()
             }
         )
 
+        let width: CGFloat = 520
+        let height: CGFloat = 580
+
         let hostingView = NSHostingView(rootView: contentView)
-        hostingView.frame = NSRect(x: 0, y: 0, width: 320, height: 400)
+        hostingView.frame = NSRect(x: 0, y: 0, width: width, height: height)
 
         let panel = NSPanel(
-            contentRect: NSRect(x: 0, y: 0, width: 320, height: 400),
+            contentRect: NSRect(x: 0, y: 0, width: width, height: height),
             styleMask: [.nonactivatingPanel, .titled, .closable, .fullSizeContentView],
             backing: .buffered,
             defer: false
@@ -45,14 +53,14 @@ final class PopupWindow {
         panel.isFloatingPanel = true
         panel.titleVisibility = .hidden
         panel.titlebarAppearsTransparent = true
-        panel.isMovableByWindowBackground = false
+        panel.isMovableByWindowBackground = true
         panel.level = .floating
         panel.backgroundColor = .clear
 
         var origin = NSEvent.mouseLocation
         let screenFrame = NSScreen.main?.visibleFrame ?? .zero
-        origin.x = min(origin.x, screenFrame.maxX - 320)
-        origin.y = max(origin.y - 400, screenFrame.minY)
+        origin.x = min(origin.x, screenFrame.maxX - width)
+        origin.y = max(origin.y - height, screenFrame.minY)
         panel.setFrameOrigin(origin)
 
         panel.makeKeyAndOrderFront(nil)
@@ -61,7 +69,7 @@ final class PopupWindow {
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             if event.keyCode == 53 {
                 self?.dismiss()
-                onComplete(nil)
+                onCancel()
                 return nil
             }
             return event
@@ -69,7 +77,7 @@ final class PopupWindow {
 
         clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { [weak self] _ in
             self?.dismiss()
-            onComplete(nil)
+            onCancel()
         }
     }
 

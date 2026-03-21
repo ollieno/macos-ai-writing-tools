@@ -5,10 +5,10 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 BUILD_DIR="$PROJECT_DIR/build"
 APP_NAME="AI Writing Tools"
-SCHEME="AiTools"
+SCHEME="AiWritingTools"
 
 # Read version from Info.plist
-VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$PROJECT_DIR/AiTools/Info.plist")
+VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" "$PROJECT_DIR/AiWritingTools/Info.plist")
 DMG_NAME="$APP_NAME-$VERSION.dmg"
 
 echo "Building $APP_NAME v$VERSION..."

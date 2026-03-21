@@ -10,7 +10,7 @@ final class ClaudeCodeBridge {
 
     private let binaryPath: String
     private let timeout: TimeInterval
-    private let logger = Logger(subsystem: "com.aitools.AiTools", category: "ClaudeCodeBridge")
+    private let logger = Logger(subsystem: "com.aitools.AiWritingTools", category: "ClaudeCodeBridge")
 
     init(binaryPath: String? = nil, timeout: TimeInterval = 120) {
         self.binaryPath = binaryPath ?? Self.findBinary(named: "claude") ?? ""
@@ -107,7 +107,7 @@ final class ClaudeCodeBridge {
 
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/zsh")
-        process.arguments = ["-l", "-c", "which \(name)"]
+        process.arguments = ["-c", "which \(name)"]
         let pipe = Pipe()
         process.standardOutput = pipe
         process.standardError = Pipe()

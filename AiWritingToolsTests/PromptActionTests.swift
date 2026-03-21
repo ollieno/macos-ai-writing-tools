@@ -1,5 +1,5 @@
 import XCTest
-@testable import AiTools
+@testable import AiWritingTools
 
 final class PromptActionTests: XCTestCase {
     func testComposePromptReplacesPlaceholder() {

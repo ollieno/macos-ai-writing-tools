@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct AiToolsApp: App {
+struct AiWritingToolsApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {

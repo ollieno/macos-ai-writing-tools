@@ -1,6 +1,6 @@
 import XCTest
 
-final class AiToolsTests: XCTestCase {
+final class AiWritingToolsTests: XCTestCase {
     func testPlaceholder() {
         XCTAssertTrue(true)
     }

@@ -1,5 +1,5 @@
 import XCTest
-@testable import AiTools
+@testable import AiWritingTools
 
 final class ClaudeCodeBridgeTests: XCTestCase {
     func testFindClaudeBinaryReturnsPathWhenEchoExists() {

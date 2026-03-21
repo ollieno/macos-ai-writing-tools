@@ -5,37 +5,38 @@ options:
     macOS: "14.0"
   xcodeVersion: "16.0"
 targets:
-  AiTools:
+  AiWritingTools:
     type: application
     platform: macOS
     sources:
-      - AiTools
+      - AiWritingTools
     resources:
       - Resources
     settings:
       base:
-        INFOPLIST_FILE: AiTools/Info.plist
+        INFOPLIST_FILE: AiWritingTools/Info.plist
         PRODUCT_NAME: AI Writing Tools
-        PRODUCT_BUNDLE_IDENTIFIER: com.aitools.AiTools
+        PRODUCT_MODULE_NAME: AiWritingTools
+        PRODUCT_BUNDLE_IDENTIFIER: com.aitools.AiWritingTools
         MACOSX_DEPLOYMENT_TARGET: "14.0"
         ENABLE_APP_SANDBOX: false
         CODE_SIGN_IDENTITY: "-"
         CODE_SIGN_STYLE: Manual
     info:
-      path: AiTools/Info.plist
+      path: AiWritingTools/Info.plist
       properties:
         NSPrincipalClass: NSApplication
         NSAccessibilityUsageDescription: "AI Writing Tools heeft Accessibility-toegang nodig om geselecteerde tekst te lezen en resultaten te plakken."
-  AiToolsTests:
+  AiWritingToolsTests:
     type: bundle.unit-test
     platform: macOS
     sources:
-      - AiToolsTests
+      - AiWritingToolsTests
     dependencies:
-      - target: AiTools
+      - target: AiWritingTools
     settings:
       base:
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AI Writing Tools.app/Contents/MacOS/AI Writing Tools"
         BUNDLE_LOADER: "$(TEST_HOST)"
         GENERATE_INFOPLIST_FILE: YES
-        PRODUCT_BUNDLE_IDENTIFIER: com.aitools.AiToolsTests
+        PRODUCT_BUNDLE_IDENTIFIER: com.aitools.AiWritingToolsTests

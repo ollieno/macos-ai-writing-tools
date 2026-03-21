@@ -1,5 +1,5 @@
 import XCTest
-@testable import AiTools
+@testable import AiWritingTools
 
 final class SeedPromptsTests: XCTestCase {
     var tempDir: URL!
@@ -7,7 +7,7 @@ final class SeedPromptsTests: XCTestCase {
     override func setUp() {
         super.setUp()
         tempDir = FileManager.default.temporaryDirectory
-            .appendingPathComponent("AiToolsSeed-\(UUID().uuidString)")
+            .appendingPathComponent("AiWritingToolsSeed-\(UUID().uuidString)")
     }
 
     override func tearDown() {

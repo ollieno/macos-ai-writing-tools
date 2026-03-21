@@ -4,11 +4,11 @@ import os
 struct PromptLibrary {
     static var promptsDirectory: URL {
         FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-            .appendingPathComponent("AiTools/prompts")
+            .appendingPathComponent("AiWritingTools/prompts")
     }
 
     private let directory: URL
-    private let logger = Logger(subsystem: "com.aitools.AiTools", category: "PromptLibrary")
+    private let logger = Logger(subsystem: "com.aitools.AiWritingTools", category: "PromptLibrary")
 
     init(directory: URL? = nil) {
         self.directory = directory ?? Self.promptsDirectory

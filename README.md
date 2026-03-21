@@ -17,7 +17,7 @@ The app ships with Dutch-language prompts organized in categories:
 - **Vertaling**: translate to English or Dutch
 - **Stijl**: make text shorter, more formal, more informal, or summarize
 
-You can add your own prompts by creating `.md` files in `~/Library/Application Support/AiTools/prompts/`. Folders become categories. Each file must contain `{{text}}` as a placeholder for the selected text.
+You can add your own prompts by creating `.md` files in `~/Library/Application Support/AiWritingTools/prompts/`. Folders become categories. Each file must contain `{{text}}` as a placeholder for the selected text.
 
 ## Requirements
 
@@ -34,7 +34,7 @@ The project uses [XcodeGen](https://github.com/yonaskolb/XcodeGen) to manage the
 xcodegen generate
 
 # Build
-xcodebuild -scheme AiTools -configuration Release build
+xcodebuild -scheme AiWritingTools -configuration Release build
 
 # Build a DMG for distribution
 ./scripts/build-dmg.sh

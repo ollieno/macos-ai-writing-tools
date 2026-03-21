@@ -1,5 +1,5 @@
 import XCTest
-@testable import AiTools
+@testable import AiWritingTools
 
 final class PromptLibraryTests: XCTestCase {
     var tempDir: URL!
@@ -7,7 +7,7 @@ final class PromptLibraryTests: XCTestCase {
     override func setUp() {
         super.setUp()
         tempDir = FileManager.default.temporaryDirectory
-            .appendingPathComponent("AiToolsTest-\(UUID().uuidString)")
+            .appendingPathComponent("AiWritingToolsTest-\(UUID().uuidString)")
         try! FileManager.default.createDirectory(at: tempDir, withIntermediateDirectories: true)
     }
 
