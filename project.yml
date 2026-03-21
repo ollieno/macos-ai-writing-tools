@@ -42,3 +42,5 @@ targets:
       base:
         TEST_HOST: "$(BUILT_PRODUCTS_DIR)/AiTools.app/Contents/MacOS/AiTools"
         BUNDLE_LOADER: "$(TEST_HOST)"
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.aitools.AiToolsTests
