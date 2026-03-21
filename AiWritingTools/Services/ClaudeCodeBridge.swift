@@ -93,6 +93,7 @@ final class ClaudeCodeBridge {
     static func findBinary(named name: String) -> String? {
         let knownPaths = [
             "/usr/local/bin/\(name)",
+            "\(NSHomeDirectory())/.local/bin/\(name)",
             "\(NSHomeDirectory())/.claude/bin/\(name)",
             "/opt/homebrew/bin/\(name)",
             "/usr/bin/\(name)",
@@ -107,7 +108,7 @@ final class ClaudeCodeBridge {
 
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/bin/zsh")
-        process.arguments = ["-c", "which \(name)"]
+        process.arguments = ["-ilc", "which \(name)"]
         let pipe = Pipe()
         process.standardOutput = pipe
         process.standardError = Pipe()
