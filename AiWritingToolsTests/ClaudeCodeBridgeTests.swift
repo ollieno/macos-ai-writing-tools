@@ -2,16 +2,6 @@ import XCTest
 @testable import AiWritingTools
 
 final class ClaudeCodeBridgeTests: XCTestCase {
-    func testFindClaudeBinaryReturnsPathWhenEchoExists() {
-        let path = ClaudeCodeBridge.findBinary(named: "echo")
-        XCTAssertNotNil(path)
-    }
-
-    func testFindClaudeBinaryReturnsNilForNonexistent() {
-        let path = ClaudeCodeBridge.findBinary(named: "definitely-not-a-real-binary-xyz")
-        XCTAssertNil(path)
-    }
-
     func testRunProcessCapturesStdoutViaStdin() async throws {
         let bridge = ClaudeCodeBridge(binaryPath: "/bin/cat")
         let result = try await bridge.run(prompt: "hello world")

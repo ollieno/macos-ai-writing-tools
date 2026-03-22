@@ -5,6 +5,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let textProcessor = TextProcessor()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        // Skip full initialization when running as test host
+        if ProcessInfo.processInfo.environment["XCTestBundlePath"] != nil {
+            return
+        }
+
         let runningInstances = NSRunningApplication.runningApplications(withBundleIdentifier: Bundle.main.bundleIdentifier!)
         if runningInstances.count > 1 {
             NSApp.terminate(nil)

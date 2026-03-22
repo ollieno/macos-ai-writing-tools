@@ -40,6 +40,16 @@ struct PromptLibrary {
             .filter { !$0.actions.isEmpty }
     }
 
+    func loadCategories(availableContent: Set<ContentType>) -> [PromptCategory] {
+        return loadCategories().compactMap { category in
+            let filtered = category.actions.filter { action in
+                action.requiredContentTypes.isSubset(of: availableContent)
+            }
+            guard !filtered.isEmpty else { return nil }
+            return PromptCategory(name: category.name, actions: filtered)
+        }
+    }
+
     private func loadCategory(from url: URL) -> PromptCategory? {
         let fm = FileManager.default
         guard let files = try? fm.contentsOfDirectory(
@@ -70,8 +80,8 @@ struct PromptLibrary {
             logger.warning("Empty file: \(url.path)")
             return nil
         }
-        guard content.contains("{{text}}") else {
-            logger.warning("Missing {{text}} placeholder: \(url.path)")
+        guard content.contains("{{text}}") || content.contains("{{image}}") else {
+            logger.warning("Missing {{text}} or {{image}} placeholder: \(url.path)")
             return nil
         }
 

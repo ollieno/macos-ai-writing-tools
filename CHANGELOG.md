@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-03-22
+
+### Added
+- Clipboard image awareness: detect images on clipboard and offer image-specific prompts
+- ClipboardInspector service for clipboard image extraction
+- Content-type filtering to PromptLibrary
+- ContentType enum and image placeholder support to PromptAction
+- Default image prompts (Beschrijf afbeelding, Lees tekst uit afbeelding)
+
+### Fixed
+- Prevent macOS TCC permission dialogs by reading only raw clipboard data
+- Defer Claude binary lookup to action time instead of app launch
+- Enable test runner by skipping app init during XCTest
+
+### Changed
+- Remove old PromptAction methods, use new text/imagePath API
+- Sync Xcode project and simplify binary lookup
+
 ## [1.1.2] - 2026-03-21
 
 ### Fixed
