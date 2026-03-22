@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2026-03-22
+
+### Added
+- User-level plugin directory at ~/Library/Application Support/AiWritingTools/plugin/
+- Plugin directory seeding on first run with skills, agents, hooks, and commands folders
+- Automatic --plugin-dir loading when plugin.json is present
+
+### Changed
+- Use --bare mode for Claude CLI to prevent user-level plugins from interfering
+- Reorganize .gitignore and add project config
+
 ## [1.2.0] - 2026-03-22
 
 ### Added
