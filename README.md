@@ -19,6 +19,16 @@ The app ships with Dutch-language prompts organized in categories:
 
 You can add your own prompts by creating `.md` files in `~/Library/Application Support/AiWritingTools/prompts/`. Folders become categories. Each file must contain `{{text}}` as a placeholder for the selected text.
 
+## Installation
+
+Download the latest DMG from the [Releases](https://github.com/ollieno/macos-ai-writing-tools/releases) page.
+
+The app is not notarized, so macOS will block it on first launch. After copying the app to Applications, run:
+
+```bash
+xattr -cr "/Applications/AI Writing Tools.app"
+```
+
 ## Requirements
 
 - macOS 14.0 (Sonoma) or later
