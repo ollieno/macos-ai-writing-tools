@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2026-03-22
+
+### Fixed
+- Replace --bare with --disable-slash-commands to preserve OAuth authentication
+
 ## [1.3.0] - 2026-03-22
 
 ### Added
