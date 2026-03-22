@@ -10,6 +10,7 @@
 		066788F32A07499D02391083 /* ProcessingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843965BC667F56DF9E734E25 /* ProcessingOverlay.swift */; };
 		0D7156DDB292B6A2CB983867 /* ProcessingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDCB5E5047B0FC55268B6354 /* ProcessingState.swift */; };
 		1153639B74C6B5AAD0B6FE96 /* ClaudeCodeBridgeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D39DE65764BB19B95ACB181 /* ClaudeCodeBridgeTests.swift */; };
+		315DEA349F082AFED7D985AF /* ClipboardInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = B897E9D58B3A9A180CB15055 /* ClipboardInspector.swift */; };
 		385E430639D16742F71003D1 /* PromptLibraryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D12543D908AE5514A2AAF9D6 /* PromptLibraryTests.swift */; };
 		43B8401C93D83D1B5BB29383 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4737A0F579989337F6A299A4 /* AppDelegate.swift */; };
 		4689740A064C1C2B2ECD2CB6 /* ClaudeCodeBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8A17916928EC8C5C9FC5FF5 /* ClaudeCodeBridge.swift */; };
@@ -26,6 +27,7 @@
 		97422C50991FC7E093977A4D /* TextProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA7B4215319069B35554D77 /* TextProcessor.swift */; };
 		9E2B60E3DF89956CA3DE4A64 /* TextAccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550458AB5099E13394EC2454 /* TextAccessor.swift */; };
 		DB3E00D450E91264E41A3B95 /* PopupWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DBD95443B513BB73FFB367 /* PopupWindow.swift */; };
+		F36F22C07DB8E80D53D30442 /* ClipboardInspectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E481D9EC0E946F622E986BFB /* ClipboardInspectorTests.swift */; };
 		F9FB37C23CF7AA4A835463B2 /* PromptCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AC23E27F888DA30A5C6332 /* PromptCategory.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,10 +58,12 @@
 		8D39DE65764BB19B95ACB181 /* ClaudeCodeBridgeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeCodeBridgeTests.swift; sourceTree = "<group>"; };
 		935F59E041CF0AFB97B44991 /* PromptActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptActionTests.swift; sourceTree = "<group>"; };
 		A7380664540B1C21166B3305 /* PromptAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptAction.swift; sourceTree = "<group>"; };
+		B897E9D58B3A9A180CB15055 /* ClipboardInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardInspector.swift; sourceTree = "<group>"; };
 		B9CDE6915F1757B6845799E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BDCB5E5047B0FC55268B6354 /* ProcessingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProcessingState.swift; sourceTree = "<group>"; };
 		C8A17916928EC8C5C9FC5FF5 /* ClaudeCodeBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeCodeBridge.swift; sourceTree = "<group>"; };
 		D12543D908AE5514A2AAF9D6 /* PromptLibraryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptLibraryTests.swift; sourceTree = "<group>"; };
+		E481D9EC0E946F622E986BFB /* ClipboardInspectorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardInspectorTests.swift; sourceTree = "<group>"; };
 		E9D33EFBF364C7EE641AFFC4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		EEFC2DABC8199AD8EBF2BAF1 /* PopupContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupContentView.swift; sourceTree = "<group>"; };
 		F1AC23E27F888DA30A5C6332 /* PromptCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptCategory.swift; sourceTree = "<group>"; };
@@ -79,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				C8A17916928EC8C5C9FC5FF5 /* ClaudeCodeBridge.swift */,
+				B897E9D58B3A9A180CB15055 /* ClipboardInspector.swift */,
 				5AB0919DB1E581E65A259722 /* HotkeyManager.swift */,
 				4AEAAA2A616A55E4244969E4 /* PromptLibrary.swift */,
 				5EFD3A5E53D53956A4768E66 /* SeedPrompts.swift */,
@@ -92,6 +97,7 @@
 			children = (
 				45C3DAED5366855AFCABA6AB /* AiWritingToolsTests.swift */,
 				8D39DE65764BB19B95ACB181 /* ClaudeCodeBridgeTests.swift */,
+				E481D9EC0E946F622E986BFB /* ClipboardInspectorTests.swift */,
 				935F59E041CF0AFB97B44991 /* PromptActionTests.swift */,
 				D12543D908AE5514A2AAF9D6 /* PromptLibraryTests.swift */,
 				39B851ED62F2090A77044E5B /* SeedPromptsTests.swift */,
@@ -234,6 +240,7 @@
 			files = (
 				73D237754118C19B62745241 /* AiWritingToolsTests.swift in Sources */,
 				1153639B74C6B5AAD0B6FE96 /* ClaudeCodeBridgeTests.swift in Sources */,
+				F36F22C07DB8E80D53D30442 /* ClipboardInspectorTests.swift in Sources */,
 				8B743268838411114635BD36 /* PromptActionTests.swift in Sources */,
 				385E430639D16742F71003D1 /* PromptLibraryTests.swift in Sources */,
 				66DDD62A0771C55DBCD04594 /* SeedPromptsTests.swift in Sources */,
@@ -247,6 +254,7 @@
 				6E24A949862387779F8042C5 /* AiWritingToolsApp.swift in Sources */,
 				43B8401C93D83D1B5BB29383 /* AppDelegate.swift in Sources */,
 				4689740A064C1C2B2ECD2CB6 /* ClaudeCodeBridge.swift in Sources */,
+				315DEA349F082AFED7D985AF /* ClipboardInspector.swift in Sources */,
 				6DB05ABB4F0FEAF77902E3C5 /* HotkeyManager.swift in Sources */,
 				94FFE00517582C51DB249EAE /* PopupContentView.swift in Sources */,
 				DB3E00D450E91264E41A3B95 /* PopupWindow.swift in Sources */,

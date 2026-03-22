@@ -107,8 +107,8 @@ final class ClaudeCodeBridge {
         }
 
         let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/bin/zsh")
-        process.arguments = ["-lc", "which \(name)"]
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/which")
+        process.arguments = [name]
         let pipe = Pipe()
         process.standardOutput = pipe
         process.standardError = Pipe()
