@@ -12,16 +12,30 @@ final class TextProcessor {
 
         let sourceApp = NSWorkspace.shared.frontmostApplication
 
-        guard let selectedText = TextAccessor.getSelectedText(), !selectedText.isEmpty else {
+        // IMPORTANT: extract image BEFORE getSelectedText,
+        // because Cmd+C fallback in TextAccessor overwrites the clipboard
+        let imagePath = ClipboardInspector.extractImage()
+        let selectedText = TextAccessor.getSelectedText()
+        let hasText = selectedText != nil && !selectedText!.isEmpty
+
+        guard hasText || imagePath != nil else { return }
+
+        let content = ClipboardContent(
+            text: hasText ? selectedText : nil,
+            imagePath: imagePath
+        )
+
+        let library = PromptLibrary()
+        let categories = library.loadCategories(availableContent: content.availableContentTypes)
+        let systemPrompt = library.loadSystemPrompt()
+
+        guard !categories.isEmpty else {
+            if let imagePath { ClipboardInspector.cleanup(path: imagePath) }
             return
         }
 
-        let library = PromptLibrary()
-        let categories = library.loadCategories()
-        let systemPrompt = library.loadSystemPrompt()
-
         popup.show(
-            text: selectedText,
+            content: content,
             categories: categories,
             onAction: { [weak self] prompt in
                 guard let self else { return nil }
@@ -37,17 +51,20 @@ final class TextProcessor {
                 }
             },
             onReplace: { result in
+                if let imagePath { ClipboardInspector.cleanup(path: imagePath) }
                 sourceApp?.activate()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
                     TextAccessor.pasteText(result)
                 }
             },
             onCopy: { result in
+                if let imagePath { ClipboardInspector.cleanup(path: imagePath) }
                 NSPasteboard.general.clearContents()
                 NSPasteboard.general.setString(result, forType: .string)
                 sourceApp?.activate()
             },
             onCancel: {
+                if let imagePath { ClipboardInspector.cleanup(path: imagePath) }
                 sourceApp?.activate()
             }
         )

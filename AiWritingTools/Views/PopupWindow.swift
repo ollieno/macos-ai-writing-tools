@@ -9,7 +9,7 @@ final class PopupWindow {
     private var clickMonitor: Any?
 
     func show(
-        text: String,
+        content: ClipboardContent,
         categories: [PromptCategory],
         onAction: @escaping (String) async -> String?,
         onReplace: @escaping (String) -> Void,
@@ -21,7 +21,7 @@ final class PopupWindow {
 
         let contentView = PopupContentView(
             categories: categories,
-            selectedText: text,
+            content: content,
             onAction: onAction,
             onReplace: { [weak self] result in
                 self?.dismiss()

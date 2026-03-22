@@ -86,7 +86,7 @@ private struct SubmitTextEditor: NSViewRepresentable {
 
 struct PopupContentView: View {
     let categories: [PromptCategory]
-    let selectedText: String
+    let content: ClipboardContent
     let onAction: (String) async -> String?
     let onReplace: (String) -> Void
     let onCopy: (String) -> Void
@@ -106,6 +106,22 @@ struct PopupContentView: View {
                 .padding(.top, 16)
                 .padding(.bottom, 12)
                 .background(WindowDragArea())
+
+            // Content indicators
+            HStack(spacing: 8) {
+                if content.hasText {
+                    Label("Tekst", systemImage: "doc.text")
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                }
+                if content.hasImage {
+                    Label("Afbeelding", systemImage: "photo")
+                        .font(.system(size: 11))
+                        .foregroundColor(.secondary)
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 4)
 
             switch state {
             case .idle:
@@ -136,7 +152,7 @@ struct PopupContentView: View {
 
                     ForEach(category.actions) { action in
                         Button(action: {
-                            guard let composed = action.composePrompt(with: selectedText) else { return }
+                            guard let composed = action.composePrompt(text: content.text, imagePath: content.imagePath) else { return }
                             executeAction(prompt: composed)
                         }) {
                             Text(action.name)
@@ -220,10 +236,12 @@ struct PopupContentView: View {
                 }
                 .buttonStyle(.bordered)
 
-                Button("Vervang") {
-                    onReplace(result)
+                if content.hasText {
+                    Button("Vervang") {
+                        onReplace(result)
+                    }
+                    .buttonStyle(.borderedProminent)
                 }
-                .buttonStyle(.borderedProminent)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -250,7 +268,7 @@ struct PopupContentView: View {
     private func submitFreeform() {
         let instruction = freeformText.trimmingCharacters(in: .whitespaces)
         guard !instruction.isEmpty else { return }
-        let composed = PromptAction.composeFreeformPrompt(instruction: instruction, text: selectedText)
+        let composed = PromptAction.composeFreeformPrompt(instruction: instruction, text: content.text, imagePath: content.imagePath)
         executeAction(prompt: composed)
     }
 
