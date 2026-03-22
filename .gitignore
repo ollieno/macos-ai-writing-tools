@@ -1,5 +1,11 @@
-.build/
+# macOS
+.DS_Store
+
+# Xcode
 *.xcuserdata
 DerivedData/
+build/
+
+# Superpowers plugin
 .superpowers/
 docs/superpowers/
