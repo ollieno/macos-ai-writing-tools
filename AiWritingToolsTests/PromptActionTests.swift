@@ -35,4 +35,66 @@ final class PromptActionTests: XCTestCase {
         )
         XCTAssertEqual(result, "Make it funny\nGeef alleen het resultaat terug, zonder uitleg.\n\nHello world")
     }
+
+    // MARK: - ContentType and image placeholder tests
+
+    func testRequiredContentTypesTextOnly() {
+        let action = PromptAction(name: "T", template: "Fix: {{text}}")
+        XCTAssertEqual(action.requiredContentTypes, [.text])
+    }
+
+    func testRequiredContentTypesImageOnly() {
+        let action = PromptAction(name: "T", template: "Describe: {{image}}")
+        XCTAssertEqual(action.requiredContentTypes, [.image])
+    }
+
+    func testRequiredContentTypesBoth() {
+        let action = PromptAction(name: "T", template: "Context: {{text}} Image: {{image}}")
+        XCTAssertEqual(action.requiredContentTypes, [.text, .image])
+    }
+
+    func testComposePromptWithImage() {
+        let action = PromptAction(name: "T", template: "Describe: {{image}}")
+        let result = action.composePrompt(text: nil, imagePath: "/tmp/test.png")
+        XCTAssertEqual(result, "Describe: /tmp/test.png")
+    }
+
+    func testComposePromptWithTextAndImage() {
+        let action = PromptAction(name: "T", template: "Context: {{text}} Image: {{image}}")
+        let result = action.composePrompt(text: "hello", imagePath: "/tmp/test.png")
+        XCTAssertEqual(result, "Context: hello Image: /tmp/test.png")
+    }
+
+    func testComposePromptReturnsNilWhenImageMissing() {
+        let action = PromptAction(name: "T", template: "Describe: {{image}}")
+        let result = action.composePrompt(text: "hello", imagePath: nil)
+        XCTAssertNil(result)
+    }
+
+    func testComposePromptReturnsNilWhenTextMissing() {
+        let action = PromptAction(name: "T", template: "Fix: {{text}}")
+        let result = action.composePrompt(text: nil, imagePath: "/tmp/test.png")
+        XCTAssertNil(result)
+    }
+
+    func testFreeformWithImage() {
+        let result = PromptAction.composeFreeformPrompt(
+            instruction: "Describe this",
+            text: nil,
+            imagePath: "/tmp/test.png"
+        )
+        XCTAssertTrue(result.contains("/tmp/test.png"))
+        XCTAssertTrue(result.contains("Describe this"))
+    }
+
+    func testFreeformWithTextAndImage() {
+        let result = PromptAction.composeFreeformPrompt(
+            instruction: "Translate",
+            text: "context here",
+            imagePath: "/tmp/test.png"
+        )
+        XCTAssertTrue(result.contains("context here"))
+        XCTAssertTrue(result.contains("/tmp/test.png"))
+        XCTAssertTrue(result.contains("Translate"))
+    }
 }
