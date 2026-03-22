@@ -7,16 +7,16 @@ final class PromptActionTests: XCTestCase {
             name: "Test",
             template: "Fix this:\n\n{{text}}"
         )
-        let result = action.composePrompt(with: "Hello wrold")
+        let result = action.composePrompt(text: "Hello wrold", imagePath: nil)
         XCTAssertEqual(result, "Fix this:\n\nHello wrold")
     }
 
-    func testComposePromptWithoutPlaceholderReturnsNil() {
+    func testComposePromptWithoutPlaceholderReturnsTemplate() {
         let action = PromptAction(
             name: "Bad",
             template: "No placeholder here"
         )
-        XCTAssertNil(action.composePrompt(with: "text"))
+        XCTAssertEqual(action.composePrompt(text: "text", imagePath: nil), "No placeholder here")
     }
 
     func testComposePromptMultiplePlaceholders() {
@@ -24,16 +24,17 @@ final class PromptActionTests: XCTestCase {
             name: "Multi",
             template: "A: {{text}} B: {{text}}"
         )
-        let result = action.composePrompt(with: "hi")
+        let result = action.composePrompt(text: "hi", imagePath: nil)
         XCTAssertEqual(result, "A: hi B: hi")
     }
 
     func testFreeformPromptComposition() {
         let result = PromptAction.composeFreeformPrompt(
             instruction: "Make it funny",
-            text: "Hello world"
+            text: "Hello world",
+            imagePath: nil
         )
-        XCTAssertEqual(result, "Make it funny\nGeef alleen het resultaat terug, zonder uitleg.\n\nHello world")
+        XCTAssertEqual(result, "Make it funny\n\nGeef alleen het resultaat terug, zonder uitleg.\n\nHello world")
     }
 
     // MARK: - ContentType and image placeholder tests

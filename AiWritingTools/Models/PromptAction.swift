@@ -17,11 +17,6 @@ struct PromptAction: Identifiable {
         return types
     }
 
-    func composePrompt(with text: String) -> String? {
-        guard template.contains("{{text}}") else { return nil }
-        return template.replacingOccurrences(of: "{{text}}", with: text)
-    }
-
     func composePrompt(text: String?, imagePath: String?) -> String? {
         var result = template
         if template.contains("{{text}}") {
@@ -33,10 +28,6 @@ struct PromptAction: Identifiable {
             result = result.replacingOccurrences(of: "{{image}}", with: imagePath)
         }
         return result
-    }
-
-    static func composeFreeformPrompt(instruction: String, text: String) -> String {
-        "\(instruction)\nGeef alleen het resultaat terug, zonder uitleg.\n\n\(text)"
     }
 
     static func composeFreeformPrompt(instruction: String, text: String?, imagePath: String?) -> String {
