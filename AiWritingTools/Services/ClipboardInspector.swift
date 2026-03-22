@@ -18,7 +18,19 @@ struct ClipboardContent {
 struct ClipboardInspector {
     static func extractImage() -> String? {
         let pasteboard = NSPasteboard.general
-        guard let image = NSImage(pasteboard: pasteboard) else { return nil }
+        let types = pasteboard.types ?? []
+
+        // Only read raw image data (TIFF/PNG) directly from the pasteboard.
+        // Avoid NSImage(pasteboard:) as it resolves file URLs, which triggers
+        // macOS TCC permission dialogs when the image came from Photos or
+        // other protected locations.
+        let rawImageTypes: [NSPasteboard.PasteboardType] = [.tiff, .png]
+        guard let matchedType = rawImageTypes.first(where: { types.contains($0) }),
+              let data = pasteboard.data(forType: matchedType),
+              let image = NSImage(data: data) else {
+            return nil
+        }
+
         guard let tiffData = image.tiffRepresentation,
               let bitmap = NSBitmapImageRep(data: tiffData),
               let pngData = bitmap.representation(using: .png, properties: [:]) else {

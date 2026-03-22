@@ -8,20 +8,38 @@ final class ClaudeCodeBridge {
         case processFailed(String)
     }
 
-    private let binaryPath: String
+    private let overridePath: String?
     private let timeout: TimeInterval
     private let logger = Logger(subsystem: "ai.amihuman.macos.AiWritingTools", category: "ClaudeCodeBridge")
 
+    private static let knownPaths = [
+        "/usr/local/bin/claude",
+        "\(NSHomeDirectory())/.local/bin/claude",
+        "\(NSHomeDirectory())/.claude/bin/claude",
+        "/opt/homebrew/bin/claude",
+        "/usr/bin/claude",
+        "/bin/claude"
+    ]
+
     init(binaryPath: String? = nil, timeout: TimeInterval = 120) {
-        self.binaryPath = binaryPath ?? Self.findBinary(named: "claude") ?? ""
+        self.overridePath = binaryPath
         self.timeout = timeout
     }
 
     func run(prompt: String, systemPrompt: String? = nil) async throws -> String {
-        guard FileManager.default.fileExists(atPath: binaryPath) else {
-            throw BridgeError.binaryNotFound
+        if let overridePath {
+            return try await execute(binaryPath: overridePath, prompt: prompt, systemPrompt: systemPrompt)
         }
 
+        for path in Self.knownPaths {
+            guard FileManager.default.isExecutableFile(atPath: path) else { continue }
+            return try await execute(binaryPath: path, prompt: prompt, systemPrompt: systemPrompt)
+        }
+
+        throw BridgeError.binaryNotFound
+    }
+
+    private func execute(binaryPath: String, prompt: String, systemPrompt: String?) async throws -> String {
         return try await withCheckedThrowingContinuation { continuation in
             let process = Process()
             process.executableURL = URL(fileURLWithPath: binaryPath)
@@ -33,8 +51,6 @@ final class ClaudeCodeBridge {
                 }
                 process.arguments = args
             } else if !prompt.contains(" ") && !prompt.contains("\n") {
-                // For non-claude binaries, pass single-token prompts as CLI arguments
-                // so utilities like sleep receive their required positional argument.
                 process.arguments = [prompt]
             }
 
@@ -88,44 +104,5 @@ final class ClaudeCodeBridge {
                 resumeOnce(with: .failure(error))
             }
         }
-    }
-
-    static func findBinary(named name: String) -> String? {
-        let knownPaths = [
-            "/usr/local/bin/\(name)",
-            "\(NSHomeDirectory())/.local/bin/\(name)",
-            "\(NSHomeDirectory())/.claude/bin/\(name)",
-            "/opt/homebrew/bin/\(name)",
-            "/usr/bin/\(name)",
-            "/bin/\(name)"
-        ]
-
-        for path in knownPaths {
-            if FileManager.default.isExecutableFile(atPath: path) {
-                return path
-            }
-        }
-
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/which")
-        process.arguments = [name]
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.standardError = Pipe()
-
-        do {
-            try process.run()
-            process.waitUntilExit()
-            let data = pipe.fileHandleForReading.readDataToEndOfFile()
-            let path = String(data: data, encoding: .utf8)?
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-            if let path, !path.isEmpty, FileManager.default.isExecutableFile(atPath: path) {
-                return path
-            }
-        } catch {
-            return nil
-        }
-
-        return nil
     }
 }
