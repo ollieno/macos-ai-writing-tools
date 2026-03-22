@@ -106,4 +106,58 @@ final class PromptLibraryTests: XCTestCase {
         let library = PromptLibrary(directory: tempDir)
         XCTAssertNil(library.loadSystemPrompt())
     }
+
+    func testLoadCategoriesWithImageContent() {
+        let cat = tempDir.appendingPathComponent("Afbeelding")
+        try! FileManager.default.createDirectory(at: cat, withIntermediateDirectories: true)
+        try! "Beschrijf: {{image}}".write(to: cat.appendingPathComponent("Beschrijf.md"), atomically: true, encoding: .utf8)
+
+        let library = PromptLibrary(directory: tempDir)
+
+        let textOnly = library.loadCategories(availableContent: [.text])
+        XCTAssertTrue(textOnly.isEmpty)
+
+        let withImage = library.loadCategories(availableContent: [.image])
+        XCTAssertEqual(withImage.count, 1)
+        XCTAssertEqual(withImage[0].actions[0].name, "Beschrijf")
+    }
+
+    func testLoadCategoriesMixedContentFiltering() {
+        let textCat = tempDir.appendingPathComponent("Correctie")
+        try! FileManager.default.createDirectory(at: textCat, withIntermediateDirectories: true)
+        try! "Fix: {{text}}".write(to: textCat.appendingPathComponent("Spelling.md"), atomically: true, encoding: .utf8)
+
+        let imgCat = tempDir.appendingPathComponent("Afbeelding")
+        try! FileManager.default.createDirectory(at: imgCat, withIntermediateDirectories: true)
+        try! "Describe: {{image}}".write(to: imgCat.appendingPathComponent("OCR.md"), atomically: true, encoding: .utf8)
+
+        let library = PromptLibrary(directory: tempDir)
+
+        let textOnly = library.loadCategories(availableContent: [.text])
+        XCTAssertEqual(textOnly.count, 1)
+        XCTAssertEqual(textOnly[0].name, "Correctie")
+
+        let both = library.loadCategories(availableContent: [.text, .image])
+        XCTAssertEqual(both.count, 2)
+    }
+
+    func testAcceptsImagePlaceholderInValidation() {
+        let cat = tempDir.appendingPathComponent("Test")
+        try! FileManager.default.createDirectory(at: cat, withIntermediateDirectories: true)
+        try! "Describe: {{image}}".write(to: cat.appendingPathComponent("Img.md"), atomically: true, encoding: .utf8)
+
+        let library = PromptLibrary(directory: tempDir)
+        let categories = library.loadCategories(availableContent: [.image])
+        XCTAssertEqual(categories.count, 1)
+    }
+
+    func testRejectsPromptsWithoutAnyPlaceholder() {
+        let cat = tempDir.appendingPathComponent("Test")
+        try! FileManager.default.createDirectory(at: cat, withIntermediateDirectories: true)
+        try! "No placeholder at all".write(to: cat.appendingPathComponent("Bad.md"), atomically: true, encoding: .utf8)
+
+        let library = PromptLibrary(directory: tempDir)
+        let categories = library.loadCategories(availableContent: [.text, .image])
+        XCTAssertTrue(categories.isEmpty)
+    }
 }
