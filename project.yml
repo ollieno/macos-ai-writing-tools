@@ -41,3 +41,15 @@ targets:
         BUNDLE_LOADER: "$(TEST_HOST)"
         GENERATE_INFOPLIST_FILE: YES
         PRODUCT_BUNDLE_IDENTIFIER: ai.amihuman.macos.AiWritingToolsTests
+schemes:
+  AiWritingTools:
+    build:
+      targets:
+        AiWritingTools: all
+        AiWritingToolsTests: [test]
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - AiWritingToolsTests
