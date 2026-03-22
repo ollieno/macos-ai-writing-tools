@@ -8,6 +8,11 @@ final class ClaudeCodeBridge {
         case processFailed(String)
     }
 
+    static var pluginDirectory: URL {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("AiWritingTools/plugin")
+    }
+
     private let overridePath: String?
     private let timeout: TimeInterval
     private let logger = Logger(subsystem: "ai.amihuman.macos.AiWritingTools", category: "ClaudeCodeBridge")
@@ -45,9 +50,13 @@ final class ClaudeCodeBridge {
             process.executableURL = URL(fileURLWithPath: binaryPath)
 
             if binaryPath.hasSuffix("claude") {
-                var args = ["-p"]
+                var args = ["-p", "--bare"]
                 if let systemPrompt, !systemPrompt.isEmpty {
                     args += ["--system-prompt", systemPrompt]
+                }
+                let pluginDir = Self.pluginDirectory
+                if FileManager.default.fileExists(atPath: pluginDir.appendingPathComponent("plugin.json").path) {
+                    args += ["--plugin-dir", pluginDir.path]
                 }
                 process.arguments = args
             } else if !prompt.contains(" ") && !prompt.contains("\n") {

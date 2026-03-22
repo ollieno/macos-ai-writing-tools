@@ -52,6 +52,25 @@ struct SeedPrompts {
         Alleen het directe antwoord op de instructie, niets meer.
         """
 
+    static func seedPluginDirectory(to directory: URL) throws {
+        let fm = FileManager.default
+        guard !fm.fileExists(atPath: directory.path) else { return }
+
+        try fm.createDirectory(at: directory, withIntermediateDirectories: true)
+        for subdir in ["skills", "agents", "hooks", "commands"] {
+            try fm.createDirectory(at: directory.appendingPathComponent(subdir), withIntermediateDirectories: true)
+        }
+
+        let manifest = """
+            {
+              "name": "ai-writing-tools",
+              "description": "Custom plugins for AI Writing Tools",
+              "version": "1.0.0"
+            }
+            """
+        try manifest.write(to: directory.appendingPathComponent("plugin.json"), atomically: true, encoding: .utf8)
+    }
+
     private static func seedSystemPrompt(to directory: URL, fileManager fm: FileManager) {
         let file = directory.appendingPathComponent("_system.md")
         guard !fm.fileExists(atPath: file.path) else { return }

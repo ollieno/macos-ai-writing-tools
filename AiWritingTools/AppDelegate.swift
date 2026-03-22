@@ -20,6 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         do {
             try SeedPrompts.installIfNeeded(to: PromptLibrary.promptsDirectory)
+            try SeedPrompts.seedPluginDirectory(to: ClaudeCodeBridge.pluginDirectory)
         } catch {
             NSLog("Failed to seed prompts: \(error)")
         }
