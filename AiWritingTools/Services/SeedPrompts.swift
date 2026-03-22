@@ -30,7 +30,11 @@ struct SeedPrompts {
             ("Stijl", "Maak informeler",
              "Herschrijf de volgende tekst in een informelere, vriendelijkere toon.\nGeef alleen de herschreven tekst terug, zonder uitleg.\n\n{{text}}"),
             ("Stijl", "Vat samen",
-             "Vat de volgende tekst samen in enkele zinnen.\nGeef alleen de samenvatting terug, zonder uitleg.\n\n{{text}}")
+             "Vat de volgende tekst samen in enkele zinnen.\nGeef alleen de samenvatting terug, zonder uitleg.\n\n{{text}}"),
+            ("Afbeelding", "Beschrijf afbeelding",
+             "Beschrijf de volgende afbeelding in het Nederlands.\nWees beknopt maar volledig. Geef alleen de beschrijving terug, zonder uitleg.\n\n{{image}}"),
+            ("Afbeelding", "Lees tekst uit afbeelding",
+             "Lees alle tekst die zichtbaar is in de volgende afbeelding.\nGeef alleen de gevonden tekst terug, zonder uitleg.\n\n{{image}}")
         ]
 
         for prompt in prompts {

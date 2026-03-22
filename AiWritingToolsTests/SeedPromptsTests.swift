@@ -21,10 +21,21 @@ final class SeedPromptsTests: XCTestCase {
         let library = PromptLibrary(directory: tempDir)
         let categories = library.loadCategories()
 
-        XCTAssertEqual(categories.count, 3)
+        XCTAssertEqual(categories.count, 4)
 
         let allActions = categories.flatMap(\.actions)
-        XCTAssertEqual(allActions.count, 7)
+        XCTAssertEqual(allActions.count, 9)
+    }
+
+    func testSeedIncludesImageCategory() throws {
+        try SeedPrompts.installIfNeeded(to: tempDir)
+
+        let library = PromptLibrary(directory: tempDir)
+        let categories = library.loadCategories(availableContent: [.image])
+
+        XCTAssertEqual(categories.count, 1)
+        XCTAssertEqual(categories[0].name, "Afbeelding")
+        XCTAssertEqual(categories[0].actions.count, 2)
     }
 
     func testSeedDoesNotOverwriteExisting() throws {
