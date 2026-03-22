@@ -50,7 +50,7 @@ final class ClaudeCodeBridge {
             process.executableURL = URL(fileURLWithPath: binaryPath)
 
             if binaryPath.hasSuffix("claude") {
-                var args = ["-p", "--bare"]
+                var args = ["-p", "--disable-slash-commands"]
                 if let systemPrompt, !systemPrompt.isEmpty {
                     args += ["--system-prompt", systemPrompt]
                 }
