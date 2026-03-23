@@ -8,6 +8,12 @@ final class ClaudeCodeBridgeTests: XCTestCase {
         XCTAssertEqual(result, "hello world")
     }
 
+    func testRunAcceptsModelParameter() async throws {
+        let bridge = ClaudeCodeBridge(binaryPath: "/bin/cat")
+        let result = try await bridge.run(prompt: "hello world", model: "haiku")
+        XCTAssertEqual(result, "hello world")
+    }
+
     func testRunProcessTimesOut() async {
         let bridge = ClaudeCodeBridge(binaryPath: "/bin/sleep", timeout: 1)
         do {

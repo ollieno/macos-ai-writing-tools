@@ -22,9 +22,9 @@ final class ClaudeCodeBridge {
         self.timeout = timeout
     }
 
-    func run(prompt: String, systemPrompt: String? = nil) async throws -> String {
+    func run(prompt: String, systemPrompt: String? = nil, model: String? = nil) async throws -> String {
         let path = try resolveBinaryPath()
-        return try await execute(binaryPath: path, prompt: prompt, systemPrompt: systemPrompt)
+        return try await execute(binaryPath: path, prompt: prompt, systemPrompt: systemPrompt, model: model)
     }
 
     func version() throws -> String {
@@ -68,7 +68,7 @@ final class ClaudeCodeBridge {
         ]
     }
 
-    private func execute(binaryPath: String, prompt: String, systemPrompt: String?) async throws -> String {
+    private func execute(binaryPath: String, prompt: String, systemPrompt: String?, model: String?) async throws -> String {
         return try await withCheckedThrowingContinuation { continuation in
             let process = Process()
             process.executableURL = URL(fileURLWithPath: binaryPath)
@@ -82,6 +82,9 @@ final class ClaudeCodeBridge {
                 let pluginDir = Self.pluginDirectory
                 if FileManager.default.fileExists(atPath: pluginDir.appendingPathComponent("plugin.json").path) {
                     args += ["--plugin-dir", pluginDir.path]
+                }
+                if let model, !model.isEmpty {
+                    args += ["--model", model]
                 }
                 process.arguments = args
             } else if !prompt.contains(" ") && !prompt.contains("\n") {
