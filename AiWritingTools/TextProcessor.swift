@@ -37,10 +37,10 @@ final class TextProcessor {
         popup.show(
             content: content,
             categories: categories,
-            onAction: { [weak self] prompt in
+            onAction: { [weak self] prompt, model in
                 guard let self else { return nil }
                 do {
-                    return try await self.bridge.run(prompt: prompt, systemPrompt: systemPrompt)
+                    return try await self.bridge.run(prompt: prompt, systemPrompt: systemPrompt, model: model)
                 } catch let bridgeError as ClaudeCodeBridge.BridgeError {
                     await MainActor.run {
                         self.showError(bridgeError)

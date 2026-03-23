@@ -11,7 +11,7 @@ final class PopupWindow {
     func show(
         content: ClipboardContent,
         categories: [PromptCategory],
-        onAction: @escaping (String) async -> String?,
+        onAction: @escaping (String, String?) async -> String?,
         onReplace: @escaping (String) -> Void,
         onCopy: @escaping (String) -> Void,
         onCancel: @escaping () -> Void

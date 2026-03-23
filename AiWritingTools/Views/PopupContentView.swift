@@ -87,7 +87,7 @@ private struct SubmitTextEditor: NSViewRepresentable {
 struct PopupContentView: View {
     let categories: [PromptCategory]
     let content: ClipboardContent
-    let onAction: (String) async -> String?
+    let onAction: (String, String?) async -> String?
     let onReplace: (String) -> Void
     let onCopy: (String) -> Void
     let onDismiss: () -> Void
@@ -153,7 +153,7 @@ struct PopupContentView: View {
                     ForEach(category.actions) { action in
                         Button(action: {
                             guard let composed = action.composePrompt(text: content.text, imagePath: content.imagePath) else { return }
-                            executeAction(prompt: composed)
+                            executeAction(prompt: composed, model: action.model)
                         }) {
                             Text(action.name)
                                 .font(.system(size: 13))
@@ -272,10 +272,10 @@ struct PopupContentView: View {
         executeAction(prompt: composed)
     }
 
-    private func executeAction(prompt: String) {
+    private func executeAction(prompt: String, model: String? = nil) {
         state = .processing
         Task {
-            if let result = await onAction(prompt) {
+            if let result = await onAction(prompt, model) {
                 await MainActor.run {
                     state = .success(result)
                 }
