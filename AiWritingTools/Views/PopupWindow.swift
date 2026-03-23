@@ -45,17 +45,20 @@ final class PopupWindow {
 
         let panel = NSPanel(
             contentRect: NSRect(x: 0, y: 0, width: width, height: height),
-            styleMask: [.nonactivatingPanel, .titled, .closable, .resizable, .fullSizeContentView],
+            styleMask: [.nonactivatingPanel, .resizable],
             backing: .buffered,
             defer: false
         )
         panel.contentView = hostingView
         panel.isFloatingPanel = true
-        panel.titleVisibility = .hidden
-        panel.titlebarAppearsTransparent = true
         panel.isMovableByWindowBackground = true
         panel.level = .floating
         panel.backgroundColor = .clear
+        panel.hasShadow = true
+        panel.isOpaque = false
+        panel.contentView?.wantsLayer = true
+        panel.contentView?.layer?.cornerRadius = 12
+        panel.contentView?.layer?.masksToBounds = true
         panel.minSize = NSSize(width: 400, height: 300)
 
         var origin = NSEvent.mouseLocation
@@ -76,7 +79,11 @@ final class PopupWindow {
             return event
         }
 
-        clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { [weak self] _ in
+        clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: .leftMouseDown) { [weak self] event in
+            guard let panel = self?.panel else { return }
+            let clickLocation = event.locationInWindow == .zero ? NSEvent.mouseLocation : event.locationInWindow
+            let mouseLocation = NSEvent.mouseLocation
+            if panel.frame.contains(mouseLocation) { return }
             self?.dismiss()
             onCancel()
         }

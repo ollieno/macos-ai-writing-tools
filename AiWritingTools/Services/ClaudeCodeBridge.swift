@@ -17,37 +17,62 @@ final class ClaudeCodeBridge {
     private let timeout: TimeInterval
     private let logger = Logger(subsystem: "ai.amihuman.macos.AiWritingTools", category: "ClaudeCodeBridge")
 
-    private static let knownPaths = [
-        "/usr/local/bin/claude",
-        "\(NSHomeDirectory())/.local/bin/claude",
-        "\(NSHomeDirectory())/.claude/bin/claude",
-        "/opt/homebrew/bin/claude",
-        "/usr/bin/claude",
-        "/bin/claude"
-    ]
-
     init(binaryPath: String? = nil, timeout: TimeInterval = 120) {
         self.overridePath = binaryPath
         self.timeout = timeout
     }
 
     func run(prompt: String, systemPrompt: String? = nil) async throws -> String {
+        let path = try resolveBinaryPath()
+        return try await execute(binaryPath: path, prompt: prompt, systemPrompt: systemPrompt)
+    }
+
+    func version() throws -> String {
+        let path = try resolveBinaryPath()
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: path)
+        process.arguments = ["-v"]
+        let pipe = Pipe()
+        process.standardOutput = pipe
+        process.standardError = Pipe()
+        try process.run()
+        process.waitUntilExit()
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        return (String(data: data, encoding: .utf8) ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private static let knownPaths = [
+        "\(NSHomeDirectory())/.local/bin/claude",
+        "/usr/local/bin/claude",
+        "\(NSHomeDirectory())/.claude/bin/claude",
+        "/opt/homebrew/bin/claude"
+    ]
+
+    private func resolveBinaryPath() throws -> String {
         if let overridePath {
-            return try await execute(binaryPath: overridePath, prompt: prompt, systemPrompt: systemPrompt)
+            return overridePath
         }
-
-        for path in Self.knownPaths {
-            guard FileManager.default.isExecutableFile(atPath: path) else { continue }
-            return try await execute(binaryPath: path, prompt: prompt, systemPrompt: systemPrompt)
+        if let path = Self.knownPaths.first(where: { FileManager.default.isExecutableFile(atPath: $0) }) {
+            return path
         }
-
         throw BridgeError.binaryNotFound
+    }
+
+    private static func minimalEnvironment() -> [String: String] {
+        let home = NSHomeDirectory()
+        return [
+            "HOME": home,
+            "PATH": "\(home)/.local/bin:/usr/local/bin:\(home)/.claude/bin:/opt/homebrew/bin:/usr/bin:/bin",
+            "LANG": ProcessInfo.processInfo.environment["LANG"] ?? "en_US.UTF-8",
+            "TERM": "dumb"
+        ]
     }
 
     private func execute(binaryPath: String, prompt: String, systemPrompt: String?) async throws -> String {
         return try await withCheckedThrowingContinuation { continuation in
             let process = Process()
             process.executableURL = URL(fileURLWithPath: binaryPath)
+            process.environment = Self.minimalEnvironment()
 
             if binaryPath.hasSuffix("claude") {
                 var args = ["-p", "--disable-slash-commands"]
@@ -95,7 +120,7 @@ final class ClaudeCodeBridge {
                 let output = String(data: data, encoding: .utf8) ?? ""
 
                 if process.terminationStatus == 0 {
-                    resumeOnce(with: .success(output))
+                    resumeOnce(with: .success(output.trimmingCharacters(in: .whitespacesAndNewlines)))
                 } else {
                     let errData = stderrPipe.fileHandleForReading.readDataToEndOfFile()
                     let errOutput = String(data: errData, encoding: .utf8) ?? "Unknown error"
