@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.2] - 2026-03-23
+
+### Fixed
+- Prevent macOS TCC permission prompts (Downloads, Photos, Apple Music) by using minimal subprocess environment
+- Remove leading whitespace from Claude CLI output
+- Fix popup window titlebar clicks dismissing the window instead of allowing drag
+
 ## [1.3.1] - 2026-03-22
 
 ### Fixed
