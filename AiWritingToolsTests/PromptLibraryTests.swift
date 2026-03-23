@@ -160,4 +160,56 @@ final class PromptLibraryTests: XCTestCase {
         let categories = library.loadCategories(availableContent: [.text, .image])
         XCTAssertTrue(categories.isEmpty)
     }
+
+    func testLoadActionWithFrontmatterModel() {
+        let cat = tempDir.appendingPathComponent("Test")
+        try! FileManager.default.createDirectory(at: cat, withIntermediateDirectories: true)
+        let content = "---\nmodel: haiku\n---\nFix: {{text}}"
+        try! content.write(to: cat.appendingPathComponent("Fix.md"), atomically: true, encoding: .utf8)
+
+        let library = PromptLibrary(directory: tempDir)
+        let categories = library.loadCategories()
+
+        XCTAssertEqual(categories.count, 1)
+        XCTAssertEqual(categories[0].actions[0].model, "haiku")
+        XCTAssertEqual(categories[0].actions[0].template, "Fix: {{text}}")
+    }
+
+    func testLoadActionWithoutFrontmatterHasNilModel() {
+        let cat = tempDir.appendingPathComponent("Test")
+        try! FileManager.default.createDirectory(at: cat, withIntermediateDirectories: true)
+        try! "Fix: {{text}}".write(to: cat.appendingPathComponent("Fix.md"), atomically: true, encoding: .utf8)
+
+        let library = PromptLibrary(directory: tempDir)
+        let categories = library.loadCategories()
+
+        XCTAssertEqual(categories.count, 1)
+        XCTAssertNil(categories[0].actions[0].model)
+    }
+
+    func testLoadActionWithEmptyFrontmatter() {
+        let cat = tempDir.appendingPathComponent("Test")
+        try! FileManager.default.createDirectory(at: cat, withIntermediateDirectories: true)
+        let content = "---\n---\nFix: {{text}}"
+        try! content.write(to: cat.appendingPathComponent("Fix.md"), atomically: true, encoding: .utf8)
+
+        let library = PromptLibrary(directory: tempDir)
+        let categories = library.loadCategories()
+
+        XCTAssertEqual(categories.count, 1)
+        XCTAssertNil(categories[0].actions[0].model)
+        XCTAssertEqual(categories[0].actions[0].template, "Fix: {{text}}")
+    }
+
+    func testLoadActionWithModelWhitespace() {
+        let cat = tempDir.appendingPathComponent("Test")
+        try! FileManager.default.createDirectory(at: cat, withIntermediateDirectories: true)
+        let content = "---\nmodel:  sonnet  \n---\nFix: {{text}}"
+        try! content.write(to: cat.appendingPathComponent("Fix.md"), atomically: true, encoding: .utf8)
+
+        let library = PromptLibrary(directory: tempDir)
+        let categories = library.loadCategories()
+
+        XCTAssertEqual(categories[0].actions[0].model, "sonnet")
+    }
 }

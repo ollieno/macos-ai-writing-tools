@@ -80,12 +80,41 @@ struct PromptLibrary {
             logger.warning("Empty file: \(url.path)")
             return nil
         }
-        guard content.contains("{{text}}") || content.contains("{{image}}") else {
+
+        let (template, model) = parseFrontmatter(content)
+
+        guard template.contains("{{text}}") || template.contains("{{image}}") else {
             logger.warning("Missing {{text}} or {{image}} placeholder: \(url.path)")
             return nil
         }
 
         let name = url.deletingPathExtension().lastPathComponent
-        return PromptAction(name: name, template: content)
+        return PromptAction(name: name, template: template, model: model)
+    }
+
+    private func parseFrontmatter(_ content: String) -> (template: String, model: String?) {
+        let trimmed = content.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.hasPrefix("---") else {
+            return (content, nil)
+        }
+
+        let lines = content.components(separatedBy: .newlines)
+        guard let closingIndex = lines.dropFirst().firstIndex(where: { $0.trimmingCharacters(in: .whitespaces) == "---" }) else {
+            return (content, nil)
+        }
+
+        var model: String?
+        for line in lines[1..<closingIndex] {
+            let parts = line.split(separator: ":", maxSplits: 1)
+            if parts.count == 2,
+               parts[0].trimmingCharacters(in: .whitespaces) == "model" {
+                let value = parts[1].trimmingCharacters(in: .whitespaces)
+                if !value.isEmpty { model = value }
+            }
+        }
+
+        let templateLines = Array(lines[(closingIndex + 1)...])
+        let template = templateLines.joined(separator: "\n")
+        return (template, model)
     }
 }
