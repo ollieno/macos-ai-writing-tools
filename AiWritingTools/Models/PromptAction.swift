@@ -9,6 +9,13 @@ struct PromptAction: Identifiable {
     let id = UUID()
     let name: String
     let template: String
+    let model: String?
+
+    init(name: String, template: String, model: String? = nil) {
+        self.name = name
+        self.template = template
+        self.model = model
+    }
 
     var requiredContentTypes: Set<ContentType> {
         var types = Set<ContentType>()

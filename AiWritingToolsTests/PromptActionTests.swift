@@ -98,4 +98,16 @@ final class PromptActionTests: XCTestCase {
         XCTAssertTrue(result.contains("/tmp/test.png"))
         XCTAssertTrue(result.contains("Translate"))
     }
+
+    // MARK: - Model property tests
+
+    func testModelPropertyIsStored() {
+        let action = PromptAction(name: "Test", template: "{{text}}", model: "haiku")
+        XCTAssertEqual(action.model, "haiku")
+    }
+
+    func testModelDefaultsToNil() {
+        let action = PromptAction(name: "Test", template: "{{text}}")
+        XCTAssertNil(action.model)
+    }
 }
