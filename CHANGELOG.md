@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2026-03-24
+
+### Added
+- Per-prompt model selection via YAML frontmatter in .md prompt files
+- Show used model name in result preview
+
+### Changed
+- Translate all prompts, seed data and UI labels to English
+
 ## [1.3.2] - 2026-03-23
 
 ### Fixed
