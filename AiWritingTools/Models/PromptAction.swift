@@ -38,7 +38,7 @@ struct PromptAction: Identifiable {
     }
 
     static func composeFreeformPrompt(instruction: String, text: String?, imagePath: String?) -> String {
-        var parts = [instruction, "Geef alleen het resultaat terug, zonder uitleg."]
+        var parts = [instruction, "Return only the result, without explanation."]
         if let text { parts.append(text) }
         if let imagePath { parts.append(imagePath) }
         return parts.joined(separator: "\n\n")

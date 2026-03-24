@@ -34,7 +34,7 @@ final class PromptActionTests: XCTestCase {
             text: "Hello world",
             imagePath: nil
         )
-        XCTAssertEqual(result, "Make it funny\n\nGeef alleen het resultaat terug, zonder uitleg.\n\nHello world")
+        XCTAssertEqual(result, "Make it funny\n\nReturn only the result, without explanation.\n\nHello world")
     }
 
     // MARK: - ContentType and image placeholder tests

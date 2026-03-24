@@ -34,7 +34,7 @@ final class SeedPromptsTests: XCTestCase {
         let categories = library.loadCategories(availableContent: [.image])
 
         XCTAssertEqual(categories.count, 1)
-        XCTAssertEqual(categories[0].name, "Afbeelding")
+        XCTAssertEqual(categories[0].name, "Image")
         XCTAssertEqual(categories[0].actions.count, 2)
     }
 

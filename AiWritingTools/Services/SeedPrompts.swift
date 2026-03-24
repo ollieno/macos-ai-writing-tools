@@ -17,24 +17,24 @@ struct SeedPrompts {
 
     private static func installFromCode(to directory: URL, fileManager fm: FileManager) throws {
         let prompts: [(category: String, name: String, content: String)] = [
-            ("Correctie", "Corrigeer spelling",
-             "Corrigeer alle spelling- en grammaticafouten in de volgende tekst.\nBehoud de originele toon en stijl. Geef alleen de gecorrigeerde tekst terug,\nzonder uitleg.\n\n{{text}}"),
-            ("Vertaling", "Vertaal naar Engels",
-             "Vertaal de volgende tekst naar het Engels.\nBehoud de toon en stijl. Geef alleen de vertaling terug, zonder uitleg.\n\n{{text}}"),
-            ("Vertaling", "Vertaal naar Nederlands",
-             "Vertaal de volgende tekst naar het Nederlands.\nBehoud de toon en stijl. Geef alleen de vertaling terug, zonder uitleg.\n\n{{text}}"),
-            ("Stijl", "Maak korter",
-             "Maak de volgende tekst korter en bondiger.\nBehoud de kernboodschap. Geef alleen de verkorte tekst terug, zonder uitleg.\n\n{{text}}"),
-            ("Stijl", "Maak formeler",
-             "Herschrijf de volgende tekst in een formelere toon.\nGeef alleen de herschreven tekst terug, zonder uitleg.\n\n{{text}}"),
-            ("Stijl", "Maak informeler",
-             "Herschrijf de volgende tekst in een informelere, vriendelijkere toon.\nGeef alleen de herschreven tekst terug, zonder uitleg.\n\n{{text}}"),
-            ("Stijl", "Vat samen",
-             "Vat de volgende tekst samen in enkele zinnen.\nGeef alleen de samenvatting terug, zonder uitleg.\n\n{{text}}"),
-            ("Afbeelding", "Beschrijf afbeelding",
-             "Beschrijf de volgende afbeelding in het Nederlands.\nWees beknopt maar volledig. Geef alleen de beschrijving terug, zonder uitleg.\n\n{{image}}"),
-            ("Afbeelding", "Lees tekst uit afbeelding",
-             "Lees alle tekst die zichtbaar is in de volgende afbeelding.\nGeef alleen de gevonden tekst terug, zonder uitleg.\n\n{{image}}")
+            ("Correction", "Fix spelling",
+             "---\nmodel: haiku\n---\nFix all spelling and grammar errors in the following text.\nPreserve the original tone, style, formatting and language. Return only the corrected text.\n\n{{text}}"),
+            ("Translation", "Translate to English",
+             "---\nmodel: haiku\n---\nTranslate the following text to English.\nPreserve the tone, style and formatting. Return only the translation.\n\n{{text}}"),
+            ("Translation", "Translate to Dutch",
+             "---\nmodel: haiku\n---\nTranslate the following text to Dutch.\nPreserve the tone, style and formatting. Return only the translation.\n\n{{text}}"),
+            ("Style", "Make shorter",
+             "---\nmodel: sonnet\n---\nMake the following text shorter and more concise.\nPreserve the key message and important details. Return only the shortened text.\n\n{{text}}"),
+            ("Style", "Make formal",
+             "---\nmodel: sonnet\n---\nRewrite the following text in a more formal, professional tone.\nPreserve the meaning, formatting and language. Return only the rewritten text.\n\n{{text}}"),
+            ("Style", "Make informal",
+             "---\nmodel: sonnet\n---\nRewrite the following text in a more informal, friendly tone.\nPreserve the meaning, formatting and language. Return only the rewritten text.\n\n{{text}}"),
+            ("Style", "Summarize",
+             "---\nmodel: sonnet\n---\nSummarize the following text in a few sentences.\nFocus on the main points and conclusions. Return only the summary.\n\n{{text}}"),
+            ("Image", "Describe image",
+             "---\nmodel: sonnet\n---\nDescribe the following image in Dutch.\nBe concise but complete. Mention the key elements, colors and composition. Return only the description.\n\n{{image}}"),
+            ("Image", "Read text from image",
+             "---\nmodel: haiku\n---\nRead all visible text in the following image.\nPreserve the original formatting where possible. Return only the extracted text.\n\n{{image}}")
         ]
 
         for prompt in prompts {
@@ -46,10 +46,10 @@ struct SeedPrompts {
     }
 
     private static let systemPromptContent = """
-        Je bent een tekstverwerkingstool. Geef ALLEEN het gevraagde resultaat terug.
-        Geen inleiding, geen afsluiting, geen uitleg, geen begeleidende tekst.
-        Niet beginnen met zinnen als "Hier is..." of "Dit is de...".
-        Alleen het directe antwoord op de instructie, niets meer.
+        You are a text processing tool. Return ONLY the requested result.
+        No introduction, no conclusion, no explanation, no accompanying text.
+        Do not start with phrases like "Here is..." or "This is the...".
+        Only the direct answer to the instruction, nothing more.
         """
 
     static func seedPluginDirectory(to directory: URL) throws {

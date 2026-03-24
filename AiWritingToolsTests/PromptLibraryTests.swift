@@ -17,7 +17,7 @@ final class PromptLibraryTests: XCTestCase {
     }
 
     func testLoadCategoriesFromFolderStructure() {
-        let cat = tempDir.appendingPathComponent("Correctie")
+        let cat = tempDir.appendingPathComponent("Correction")
         try! FileManager.default.createDirectory(at: cat, withIntermediateDirectories: true)
         let prompt = "Fix spelling:\n\n{{text}}"
         try! prompt.write(to: cat.appendingPathComponent("Spelling.md"), atomically: true, encoding: .utf8)
@@ -26,7 +26,7 @@ final class PromptLibraryTests: XCTestCase {
         let categories = library.loadCategories()
 
         XCTAssertEqual(categories.count, 1)
-        XCTAssertEqual(categories[0].name, "Correctie")
+        XCTAssertEqual(categories[0].name, "Correction")
         XCTAssertEqual(categories[0].actions.count, 1)
         XCTAssertEqual(categories[0].actions[0].name, "Spelling")
         XCTAssertEqual(categories[0].actions[0].template, prompt)
@@ -69,7 +69,7 @@ final class PromptLibraryTests: XCTestCase {
     }
 
     func testMultipleCategoriesSortedAlphabetically() {
-        for name in ["Stijl", "Correctie", "Vertaling"] {
+        for name in ["Style", "Correction", "Translation"] {
             let cat = tempDir.appendingPathComponent(name)
             try! FileManager.default.createDirectory(at: cat, withIntermediateDirectories: true)
             try! "Do: {{text}}".write(to: cat.appendingPathComponent("Action.md"), atomically: true, encoding: .utf8)
@@ -78,7 +78,7 @@ final class PromptLibraryTests: XCTestCase {
         let library = PromptLibrary(directory: tempDir)
         let categories = library.loadCategories()
 
-        XCTAssertEqual(categories.map(\.name), ["Correctie", "Stijl", "Vertaling"])
+        XCTAssertEqual(categories.map(\.name), ["Correction", "Style", "Translation"])
     }
 
     func testEmptyDirectoryReturnsNoCategories() {
@@ -108,9 +108,9 @@ final class PromptLibraryTests: XCTestCase {
     }
 
     func testLoadCategoriesWithImageContent() {
-        let cat = tempDir.appendingPathComponent("Afbeelding")
+        let cat = tempDir.appendingPathComponent("Image")
         try! FileManager.default.createDirectory(at: cat, withIntermediateDirectories: true)
-        try! "Beschrijf: {{image}}".write(to: cat.appendingPathComponent("Beschrijf.md"), atomically: true, encoding: .utf8)
+        try! "Describe: {{image}}".write(to: cat.appendingPathComponent("Describe.md"), atomically: true, encoding: .utf8)
 
         let library = PromptLibrary(directory: tempDir)
 
@@ -119,15 +119,15 @@ final class PromptLibraryTests: XCTestCase {
 
         let withImage = library.loadCategories(availableContent: [.image])
         XCTAssertEqual(withImage.count, 1)
-        XCTAssertEqual(withImage[0].actions[0].name, "Beschrijf")
+        XCTAssertEqual(withImage[0].actions[0].name, "Describe")
     }
 
     func testLoadCategoriesMixedContentFiltering() {
-        let textCat = tempDir.appendingPathComponent("Correctie")
+        let textCat = tempDir.appendingPathComponent("Correction")
         try! FileManager.default.createDirectory(at: textCat, withIntermediateDirectories: true)
         try! "Fix: {{text}}".write(to: textCat.appendingPathComponent("Spelling.md"), atomically: true, encoding: .utf8)
 
-        let imgCat = tempDir.appendingPathComponent("Afbeelding")
+        let imgCat = tempDir.appendingPathComponent("Image")
         try! FileManager.default.createDirectory(at: imgCat, withIntermediateDirectories: true)
         try! "Describe: {{image}}".write(to: imgCat.appendingPathComponent("OCR.md"), atomically: true, encoding: .utf8)
 
@@ -135,7 +135,7 @@ final class PromptLibraryTests: XCTestCase {
 
         let textOnly = library.loadCategories(availableContent: [.text])
         XCTAssertEqual(textOnly.count, 1)
-        XCTAssertEqual(textOnly[0].name, "Correctie")
+        XCTAssertEqual(textOnly[0].name, "Correction")
 
         let both = library.loadCategories(availableContent: [.text, .image])
         XCTAssertEqual(both.count, 2)
