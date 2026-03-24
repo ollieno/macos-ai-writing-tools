@@ -115,7 +115,7 @@ struct PopupContentView: View {
                         .foregroundColor(.secondary)
                 }
                 if content.hasImage {
-                    Label("Afbeelding", systemImage: "photo")
+                    Label("Image", systemImage: "photo")
                         .font(.system(size: 11))
                         .foregroundColor(.secondary)
                 }
@@ -128,8 +128,8 @@ struct PopupContentView: View {
                 actionsView
             case .processing:
                 processingView
-            case .success(let result):
-                previewView(result: result)
+            case .success(let result, let model):
+                previewView(result: result, model: model)
             case .error(let message):
                 errorView(message: message)
             }
@@ -202,15 +202,23 @@ struct PopupContentView: View {
         .frame(maxWidth: .infinity, minHeight: 200)
     }
 
-    private func previewView(result: String) -> some View {
+    private func previewView(result: String, model: String?) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Resultaat")
-                .font(.system(size: 11))
-                .foregroundColor(Color(NSColor.tertiaryLabelColor))
-                .textCase(.uppercase)
-                .padding(.horizontal, 16)
-                .padding(.top, 4)
-                .padding(.bottom, 8)
+            HStack {
+                Text("Resultaat")
+                    .font(.system(size: 11))
+                    .foregroundColor(Color(NSColor.tertiaryLabelColor))
+                    .textCase(.uppercase)
+
+                Spacer()
+
+                Text(model ?? "default")
+                    .font(.system(size: 10, weight: .medium, design: .monospaced))
+                    .foregroundColor(Color(NSColor.quaternaryLabelColor))
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 4)
+            .padding(.bottom, 8)
 
             ScrollView {
                 Text(result)
@@ -277,7 +285,7 @@ struct PopupContentView: View {
         Task {
             if let result = await onAction(prompt, model) {
                 await MainActor.run {
-                    state = .success(result)
+                    state = .success(result: result, model: model)
                 }
             } else {
                 await MainActor.run {
