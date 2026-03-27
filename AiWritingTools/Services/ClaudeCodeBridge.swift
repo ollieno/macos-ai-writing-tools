@@ -13,6 +13,14 @@ final class ClaudeCodeBridge {
             .appendingPathComponent("AiWritingTools/plugin")
     }
 
+    /// Empty sandbox directory so Claude CLI does not scan the host app's working directory.
+    private static var sandboxDirectory: URL {
+        let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("AiWritingTools/sandbox")
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        return dir
+    }
+
     private let overridePath: String?
     private let timeout: TimeInterval
     private let logger = Logger(subsystem: "ai.amihuman.macos.AiWritingTools", category: "ClaudeCodeBridge")
@@ -31,6 +39,7 @@ final class ClaudeCodeBridge {
         let path = try resolveBinaryPath()
         let process = Process()
         process.executableURL = URL(fileURLWithPath: path)
+        process.currentDirectoryURL = Self.sandboxDirectory
         process.arguments = ["-v"]
         let pipe = Pipe()
         process.standardOutput = pipe
@@ -72,10 +81,11 @@ final class ClaudeCodeBridge {
         return try await withCheckedThrowingContinuation { continuation in
             let process = Process()
             process.executableURL = URL(fileURLWithPath: binaryPath)
+            process.currentDirectoryURL = Self.sandboxDirectory
             process.environment = Self.minimalEnvironment()
 
             if binaryPath.hasSuffix("claude") {
-                var args = ["-p", "--disable-slash-commands"]
+                var args = ["-p", "--tools", "Read", "--disable-slash-commands"]
                 if let systemPrompt, !systemPrompt.isEmpty {
                     args += ["--system-prompt", systemPrompt]
                 }
