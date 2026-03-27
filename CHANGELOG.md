@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.1] - 2026-03-27
+
+### Changed
+- Sandbox Claude CLI working directory to prevent scanning irrelevant app directories
+- Restrict Claude CLI to Read tool only, eliminating file search overhead for faster responses
+
 ## [1.4.0] - 2026-03-24
 
 ### Added
