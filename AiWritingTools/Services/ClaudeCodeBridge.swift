@@ -21,6 +21,55 @@ final class ClaudeCodeBridge {
         return dir
     }
 
+    /// Isolated HOME for the Claude subprocess. Prevents Claude CLI from reading
+    /// the user's real ~/.claude/projects/ directory, which often contains paths
+    /// pointing into Google Drive / iCloud / Music libraries and triggers macOS
+    /// per-app TCC prompts attributed to AI Writing Tools.
+    private static var isolatedHomeDirectory: URL {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent("AiWritingTools/claude-home")
+    }
+
+    /// Path to the real user's Claude credentials file (OAuth tokens).
+    /// We do not move or copy this; we link to it from the isolated HOME so that
+    /// token refreshes write back to the canonical location.
+    private static var realCredentialsURL: URL {
+        URL(fileURLWithPath: NSHomeDirectory())
+            .appendingPathComponent(".claude/.credentials.json")
+    }
+
+    /// Prepares the isolated HOME directory structure for the Claude subprocess.
+    /// Creates `<isolated-home>/.claude/` and ensures credentials are reachable.
+    /// Safe to call repeatedly; idempotent.
+    private static func prepareIsolatedHome() throws {
+        let fm = FileManager.default
+        let claudeDir = isolatedHomeDirectory.appendingPathComponent(".claude")
+        try fm.createDirectory(at: claudeDir, withIntermediateDirectories: true)
+        try linkCredentials(into: claudeDir)
+    }
+
+    /// Symlinks `<isolated-home>/.claude/.credentials.json` to the user's real
+    /// credentials so OAuth login is shared with the user's terminal Claude CLI
+    /// and token refreshes write back to the canonical location.
+    private static func linkCredentials(into claudeDir: URL) throws {
+        let fm = FileManager.default
+        let realCredentials = realCredentialsURL
+
+        guard fm.fileExists(atPath: realCredentials.path) else { return }
+
+        let linkURL = claudeDir.appendingPathComponent(".credentials.json")
+        let linkPath = linkURL.path
+        let existingTarget = try? fm.destinationOfSymbolicLink(atPath: linkPath)
+
+        if existingTarget == realCredentials.path { return }
+
+        if existingTarget != nil || fm.fileExists(atPath: linkPath) {
+            try fm.removeItem(at: linkURL)
+        }
+
+        try fm.createSymbolicLink(at: linkURL, withDestinationURL: realCredentials)
+    }
+
     private let overridePath: String?
     private let timeout: TimeInterval
     private let logger = Logger(subsystem: "ai.amihuman.macos.AiWritingTools", category: "ClaudeCodeBridge")
@@ -32,14 +81,17 @@ final class ClaudeCodeBridge {
 
     func run(prompt: String, systemPrompt: String? = nil, model: String? = nil) async throws -> String {
         let path = try resolveBinaryPath()
+        try Self.prepareIsolatedHome()
         return try await execute(binaryPath: path, prompt: prompt, systemPrompt: systemPrompt, model: model)
     }
 
     func version() throws -> String {
         let path = try resolveBinaryPath()
+        try Self.prepareIsolatedHome()
         let process = Process()
         process.executableURL = URL(fileURLWithPath: path)
         process.currentDirectoryURL = Self.sandboxDirectory
+        process.environment = Self.minimalEnvironment()
         process.arguments = ["-v"]
         let pipe = Pipe()
         process.standardOutput = pipe
@@ -68,10 +120,11 @@ final class ClaudeCodeBridge {
     }
 
     private static func minimalEnvironment() -> [String: String] {
-        let home = NSHomeDirectory()
+        let realHome = NSHomeDirectory()
+        let isolatedHome = isolatedHomeDirectory.path
         return [
-            "HOME": home,
-            "PATH": "\(home)/.local/bin:/usr/local/bin:\(home)/.claude/bin:/opt/homebrew/bin:/usr/bin:/bin",
+            "HOME": isolatedHome,
+            "PATH": "\(realHome)/.local/bin:/usr/local/bin:\(realHome)/.claude/bin:/opt/homebrew/bin:/usr/bin:/bin",
             "LANG": ProcessInfo.processInfo.environment["LANG"] ?? "en_US.UTF-8",
             "TERM": "dumb"
         ]
