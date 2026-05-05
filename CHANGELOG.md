@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.2] - 2026-05-05
+
+### Fixed
+- Isolate Claude CLI subprocess HOME to prevent macOS per-app file access prompts (Google Drive, iCloud, Music) caused by Claude reading project history with paths into synced folders
+
 ## [1.4.1] - 2026-03-27
 
 ### Changed
