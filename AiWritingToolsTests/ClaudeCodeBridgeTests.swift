@@ -25,4 +25,23 @@ final class ClaudeCodeBridgeTests: XCTestCase {
             XCTFail("Unexpected error: \(error)")
         }
     }
+
+    func testProcessFailedFallsBackToStdoutWhenStderrEmpty() async throws {
+        let scriptURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            .appendingPathComponent("aiwt-bridge-test-\(UUID().uuidString).sh")
+        try "#!/bin/sh\ncat > /dev/null\necho 'Not logged in'\nexit 1\n"
+            .write(to: scriptURL, atomically: true, encoding: .utf8)
+        try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: scriptURL.path)
+        defer { try? FileManager.default.removeItem(at: scriptURL) }
+
+        let bridge = ClaudeCodeBridge(binaryPath: scriptURL.path)
+        do {
+            _ = try await bridge.run(prompt: "test prompt")
+            XCTFail("Expected processFailed")
+        } catch ClaudeCodeBridge.BridgeError.processFailed(let detail) {
+            XCTAssertEqual(detail, "Not logged in")
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
 }

@@ -45,29 +45,80 @@ final class ClaudeCodeBridge {
         let fm = FileManager.default
         let claudeDir = isolatedHomeDirectory.appendingPathComponent(".claude")
         try fm.createDirectory(at: claudeDir, withIntermediateDirectories: true)
-        try linkCredentials(into: claudeDir)
+        try ensureCredentials(in: claudeDir)
     }
 
-    /// Symlinks `<isolated-home>/.claude/.credentials.json` to the user's real
-    /// credentials so OAuth login is shared with the user's terminal Claude CLI
-    /// and token refreshes write back to the canonical location.
-    private static func linkCredentials(into claudeDir: URL) throws {
+    /// Ensures `<isolated-home>/.claude/.credentials.json` exists so the Claude
+    /// subprocess can authenticate. Two paths:
+    ///
+    /// 1. If the user has a real `~/.claude/.credentials.json` file, symlink to
+    ///    it so token refreshes write back to the canonical location.
+    /// 2. Otherwise extract the OAuth tokens from the macOS Keychain entry
+    ///    `Claude Code-credentials` and write them into the isolated HOME. This
+    ///    covers users whose Terminal Claude stores credentials in Keychain
+    ///    only (the default for fresh installs).
+    private static func ensureCredentials(in claudeDir: URL) throws {
         let fm = FileManager.default
+        let credentialsURL = claudeDir.appendingPathComponent(".credentials.json")
         let realCredentials = realCredentialsURL
 
-        guard fm.fileExists(atPath: realCredentials.path) else { return }
+        if fm.fileExists(atPath: realCredentials.path) {
+            try symlinkCredentials(at: credentialsURL, to: realCredentials)
+            return
+        }
 
-        let linkURL = claudeDir.appendingPathComponent(".credentials.json")
+        if let keychainData = readCredentialsFromKeychain() {
+            try writeKeychainCredentials(keychainData, to: credentialsURL)
+        }
+    }
+
+    private static func symlinkCredentials(at linkURL: URL, to target: URL) throws {
+        let fm = FileManager.default
         let linkPath = linkURL.path
         let existingTarget = try? fm.destinationOfSymbolicLink(atPath: linkPath)
 
-        if existingTarget == realCredentials.path { return }
+        if existingTarget == target.path { return }
 
         if existingTarget != nil || fm.fileExists(atPath: linkPath) {
             try fm.removeItem(at: linkURL)
         }
+        try fm.createSymbolicLink(at: linkURL, withDestinationURL: target)
+    }
 
-        try fm.createSymbolicLink(at: linkURL, withDestinationURL: realCredentials)
+    /// Reads OAuth credentials JSON from the `Claude Code-credentials` Keychain
+    /// entry. Returns nil if the entry is missing or `security` fails (e.g. the
+    /// user denies access). Equivalent to:
+    ///     security find-generic-password -s "Claude Code-credentials" -w
+    private static func readCredentialsFromKeychain() -> Data? {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/security")
+        process.arguments = ["find-generic-password", "-s", "Claude Code-credentials", "-w"]
+        let stdoutPipe = Pipe()
+        process.standardOutput = stdoutPipe
+        process.standardError = Pipe()
+        do {
+            try process.run()
+            process.waitUntilExit()
+            guard process.terminationStatus == 0 else { return nil }
+            let data = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
+            guard let text = String(data: data, encoding: .utf8) else { return nil }
+            let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else { return nil }
+            return trimmed.data(using: .utf8)
+        } catch {
+            return nil
+        }
+    }
+
+    /// If `linkURL` is currently a symlink (legacy state from earlier builds),
+    /// remove it before writing the real file.
+    private static func writeKeychainCredentials(_ data: Data, to linkURL: URL) throws {
+        let fm = FileManager.default
+        if (try? fm.destinationOfSymbolicLink(atPath: linkURL.path)) != nil {
+            try fm.removeItem(at: linkURL)
+        }
+        try data.write(to: linkURL, options: .atomic)
+        try fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: linkURL.path)
     }
 
     private let overridePath: String?
@@ -189,8 +240,13 @@ final class ClaudeCodeBridge {
                     resumeOnce(with: .success(output.trimmingCharacters(in: .whitespacesAndNewlines)))
                 } else {
                     let errData = stderrPipe.fileHandleForReading.readDataToEndOfFile()
-                    let errOutput = String(data: errData, encoding: .utf8) ?? "Unknown error"
-                    resumeOnce(with: .failure(BridgeError.processFailed(errOutput)))
+                    let errOutput = String(data: errData, encoding: .utf8) ?? ""
+                    let stderrTrimmed = errOutput.trimmingCharacters(in: .whitespacesAndNewlines)
+                    let stdoutTrimmed = output.trimmingCharacters(in: .whitespacesAndNewlines)
+                    // Claude CLI writes some failure messages (e.g. "Not logged in") to stdout,
+                    // so fall back to stdout when stderr is empty.
+                    let detail = stderrTrimmed.isEmpty ? stdoutTrimmed : stderrTrimmed
+                    resumeOnce(with: .failure(BridgeError.processFailed(detail.isEmpty ? "Unknown error" : detail)))
                 }
             }
 
