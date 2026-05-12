@@ -1,6 +1,14 @@
 import AppKit
 import SwiftUI
 
+/// Borderless NSPanel that can still become key (and accept keyboard input).
+/// Without overriding `canBecomeKey`, a panel without a title bar relies on
+/// child views signalling first-responder requests; SwiftUI's NSViewRepresentable
+/// wrappers don't always do that, leaving text fields visually disabled.
+private final class PopupPanel: NSPanel {
+    override var canBecomeKey: Bool { true }
+}
+
 final class PopupWindow {
     private var panel: NSPanel?
     private var isActive = false
@@ -43,7 +51,7 @@ final class PopupWindow {
         let hostingView = NSHostingView(rootView: contentView)
         hostingView.frame = NSRect(x: 0, y: 0, width: width, height: height)
 
-        let panel = NSPanel(
+        let panel = PopupPanel(
             contentRect: NSRect(x: 0, y: 0, width: width, height: height),
             styleMask: [.nonactivatingPanel, .resizable],
             backing: .buffered,
