@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.4] - 2026-05-12
+
+### Fixed
+- Restore keyboard input in the freeform "Eigen prompt" field by overriding `canBecomeKey` on the borderless popup panel
+
 ## [1.4.3] - 2026-05-12
 
 ### Fixed
