@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.3] - 2026-05-12
+
+### Fixed
+- Restore authentication for users whose Claude CLI credentials live in macOS Keychain by extracting OAuth tokens into the isolated HOME (regression from 1.4.2)
+- Surface stdout in error alerts when the subprocess writes failure messages there instead of stderr (no more empty "Fout bij verwerking:" dialogs)
+
 ## [1.4.2] - 2026-05-05
 
 ### Fixed
