@@ -48,28 +48,42 @@ final class ClaudeCodeBridge {
         try ensureCredentials(in: claudeDir)
     }
 
-    /// Ensures `<isolated-home>/.claude/.credentials.json` exists so the Claude
-    /// subprocess can authenticate. Two paths:
+    /// Ensures `<isolated-home>/.claude/.credentials.json` resolves to a usable
+    /// credentials file. The isolated HOME always symlinks to the real
+    /// `~/.claude/.credentials.json`, so Claude CLI token refreshes persist to
+    /// the canonical location shared with the host CLI.
     ///
-    /// 1. If the user has a real `~/.claude/.credentials.json` file, symlink to
-    ///    it so token refreshes write back to the canonical location.
-    /// 2. Otherwise extract the OAuth tokens from the macOS Keychain entry
-    ///    `Claude Code-credentials` and write them into the isolated HOME. This
-    ///    covers users whose Terminal Claude stores credentials in Keychain
-    ///    only (the default for fresh installs).
+    /// If the real file does not yet exist (fresh installs where Claude Code
+    /// stores OAuth tokens only in the macOS Keychain), seed it once by
+    /// extracting the `Claude Code-credentials` Keychain entry and writing it
+    /// to `~/.claude/.credentials.json`. After that initial seed the Keychain
+    /// is no longer consulted: Claude CLI refresh cycles update the file
+    /// directly, keeping AI Writing Tools and the host CLI in sync.
     private static func ensureCredentials(in claudeDir: URL) throws {
         let fm = FileManager.default
         let credentialsURL = claudeDir.appendingPathComponent(".credentials.json")
         let realCredentials = realCredentialsURL
 
-        if fm.fileExists(atPath: realCredentials.path) {
-            try symlinkCredentials(at: credentialsURL, to: realCredentials)
-            return
+        if !fm.fileExists(atPath: realCredentials.path) {
+            if let keychainData = readCredentialsFromKeychain() {
+                try seedRealCredentials(keychainData, to: realCredentials)
+            }
         }
 
-        if let keychainData = readCredentialsFromKeychain() {
-            try writeKeychainCredentials(keychainData, to: credentialsURL)
+        if fm.fileExists(atPath: realCredentials.path) {
+            try symlinkCredentials(at: credentialsURL, to: realCredentials)
         }
+    }
+
+    /// Writes the initial credentials file into the real `~/.claude/` directory.
+    /// Creates the parent if missing and locks the file to 0600 to match Claude
+    /// CLI's own permission model.
+    private static func seedRealCredentials(_ data: Data, to url: URL) throws {
+        let fm = FileManager.default
+        let parent = url.deletingLastPathComponent()
+        try fm.createDirectory(at: parent, withIntermediateDirectories: true)
+        try data.write(to: url, options: .atomic)
+        try fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
     }
 
     private static func symlinkCredentials(at linkURL: URL, to target: URL) throws {
@@ -108,17 +122,6 @@ final class ClaudeCodeBridge {
         } catch {
             return nil
         }
-    }
-
-    /// If `linkURL` is currently a symlink (legacy state from earlier builds),
-    /// remove it before writing the real file.
-    private static func writeKeychainCredentials(_ data: Data, to linkURL: URL) throws {
-        let fm = FileManager.default
-        if (try? fm.destinationOfSymbolicLink(atPath: linkURL.path)) != nil {
-            try fm.removeItem(at: linkURL)
-        }
-        try data.write(to: linkURL, options: .atomic)
-        try fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: linkURL.path)
     }
 
     private let overridePath: String?
