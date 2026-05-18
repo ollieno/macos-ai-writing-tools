@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.5] - 2026-05-18
+
+### Fixed
+- Persist Claude CLI token refreshes by seeding `~/.claude/.credentials.json` once from the Keychain on first run and symlinking the isolated HOME to it. Eliminates the 401 "Invalid authentication credentials" error that surfaced after a Keychain prompt when the Keychain held stale tokens (regression from 1.4.3)
+
 ## [1.4.4] - 2026-05-12
 
 ### Fixed
