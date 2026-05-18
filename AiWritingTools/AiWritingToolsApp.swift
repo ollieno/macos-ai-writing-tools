@@ -1,3 +1,4 @@
+import AppKit
 import SwiftUI
 
 @main
@@ -12,6 +13,10 @@ struct AiWritingToolsApp: App {
             Divider()
             Button("Open Prompts Map") {
                 NSWorkspace.shared.open(PromptLibrary.promptsDirectory)
+            }
+            Button("Over AI Writing Tools") {
+                NSApp.activate(ignoringOtherApps: true)
+                NSApp.orderFrontStandardAboutPanel(nil)
             }
             Divider()
             Button("Stop AI Writing Tools") {
