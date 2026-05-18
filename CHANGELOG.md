@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2026-05-18
+
+### Added
+- "Over AI Writing Tools" menu item that opens the standard macOS About panel, showing the current version and build number
+
 ## [1.4.5] - 2026-05-18
 
 ### Fixed
