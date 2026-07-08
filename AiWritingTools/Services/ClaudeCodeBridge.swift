@@ -75,42 +75,37 @@ final class ClaudeCodeBridge {
         try fm.createSymbolicLink(at: linkURL, withDestinationURL: realKeychains)
     }
 
-    /// Ensures `<isolated-home>/.claude/.credentials.json` resolves to a usable
-    /// credentials file. The isolated HOME always symlinks to the real
-    /// `~/.claude/.credentials.json`, so Claude CLI token refreshes persist to
-    /// the canonical location shared with the host CLI.
+    /// Ensures the Claude CLI in the isolated HOME can find OAuth credentials.
     ///
-    /// If the real file does not yet exist (fresh installs where Claude Code
-    /// stores OAuth tokens only in the macOS Keychain), seed it once by
-    /// extracting the `Claude Code-credentials` Keychain entry and writing it
-    /// to `~/.claude/.credentials.json`. After that initial seed the Keychain
-    /// is no longer consulted: Claude CLI refresh cycles update the file
-    /// directly, keeping AI Writing Tools and the host CLI in sync.
+    /// The login Keychain is shared into the isolated HOME (see
+    /// `ensureKeychainAccess`), so on macOS the CLI uses it as its single source
+    /// of truth, exactly like the host CLI. We must NOT shadow it with a symlink
+    /// to `~/.claude/.credentials.json`: the host refreshes tokens in the
+    /// Keychain and never rewrites that file, so a linked copy goes stale and the
+    /// CLI reports "Not logged in". Only fall back to the file when the Keychain
+    /// has no entry (rare file-only setups); otherwise drop any stale link.
     private static func ensureCredentials(in claudeDir: URL) throws {
         let fm = FileManager.default
         let credentialsURL = claudeDir.appendingPathComponent(".credentials.json")
-        let realCredentials = realCredentialsURL
 
-        if !fm.fileExists(atPath: realCredentials.path) {
-            if let keychainData = readCredentialsFromKeychain() {
-                try seedRealCredentials(keychainData, to: realCredentials)
-            }
+        if keychainHasCredentials() {
+            removeCredentialsLink(at: credentialsURL)
+            return
         }
 
+        let realCredentials = realCredentialsURL
         if fm.fileExists(atPath: realCredentials.path) {
             try symlinkCredentials(at: credentialsURL, to: realCredentials)
         }
     }
 
-    /// Writes the initial credentials file into the real `~/.claude/` directory.
-    /// Creates the parent if missing and locks the file to 0600 to match Claude
-    /// CLI's own permission model.
-    private static func seedRealCredentials(_ data: Data, to url: URL) throws {
+    /// Removes a previously created `.credentials.json` symlink (or file) from the
+    /// isolated HOME so it cannot shadow the shared Keychain. No-op if absent.
+    private static func removeCredentialsLink(at url: URL) {
         let fm = FileManager.default
-        let parent = url.deletingLastPathComponent()
-        try fm.createDirectory(at: parent, withIntermediateDirectories: true)
-        try data.write(to: url, options: .atomic)
-        try fm.setAttributes([.posixPermissions: 0o600], ofItemAtPath: url.path)
+        if (try? fm.destinationOfSymbolicLink(atPath: url.path)) != nil || fm.fileExists(atPath: url.path) {
+            try? fm.removeItem(at: url)
+        }
     }
 
     private static func symlinkCredentials(at linkURL: URL, to target: URL) throws {
@@ -126,28 +121,21 @@ final class ClaudeCodeBridge {
         try fm.createSymbolicLink(at: linkURL, withDestinationURL: target)
     }
 
-    /// Reads OAuth credentials JSON from the `Claude Code-credentials` Keychain
-    /// entry. Returns nil if the entry is missing or `security` fails (e.g. the
-    /// user denies access). Equivalent to:
-    ///     security find-generic-password -s "Claude Code-credentials" -w
-    private static func readCredentialsFromKeychain() -> Data? {
+    /// Returns true if the `Claude Code-credentials` entry exists in the login
+    /// Keychain. Presence check only (no `-w`), so it never extracts the secret:
+    ///     security find-generic-password -s "Claude Code-credentials"
+    private static func keychainHasCredentials() -> Bool {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/security")
-        process.arguments = ["find-generic-password", "-s", "Claude Code-credentials", "-w"]
-        let stdoutPipe = Pipe()
-        process.standardOutput = stdoutPipe
+        process.arguments = ["find-generic-password", "-s", "Claude Code-credentials"]
+        process.standardOutput = Pipe()
         process.standardError = Pipe()
         do {
             try process.run()
             process.waitUntilExit()
-            guard process.terminationStatus == 0 else { return nil }
-            let data = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
-            guard let text = String(data: data, encoding: .utf8) else { return nil }
-            let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !trimmed.isEmpty else { return nil }
-            return trimmed.data(using: .utf8)
+            return process.terminationStatus == 0
         } catch {
-            return nil
+            return false
         }
     }
 
@@ -203,8 +191,14 @@ final class ClaudeCodeBridge {
     private static func minimalEnvironment() -> [String: String] {
         let realHome = NSHomeDirectory()
         let isolatedHome = isolatedHomeDirectory.path
+        // USER/LOGNAME are required for macOS Keychain access: without the user
+        // identity the Security framework cannot unlock the login Keychain, so
+        // Claude CLI cannot read its OAuth token and reports "Not logged in".
+        let userName = NSUserName()
         return [
             "HOME": isolatedHome,
+            "USER": userName,
+            "LOGNAME": userName,
             "PATH": "\(realHome)/.local/bin:/usr/local/bin:\(realHome)/.claude/bin:/opt/homebrew/bin:/usr/bin:/bin",
             "LANG": ProcessInfo.processInfo.environment["LANG"] ?? "en_US.UTF-8",
             "TERM": "dumb"
