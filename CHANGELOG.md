@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.1] - 2026-07-08
+
+### Fixed
+- Share the login Keychain with the isolated Claude HOME so token refreshes no longer trigger the "Keychain Not Found" system dialog
+
 ## [1.5.0] - 2026-05-18
 
 ### Added
