@@ -14,7 +14,9 @@ final class ClaudeCodeBridge {
     }
 
     /// Empty sandbox directory so Claude CLI does not scan the host app's working directory.
-    private static var sandboxDirectory: URL {
+    /// Also the read scope for the CLI: files here (e.g. a pasted image) are inside the
+    /// subprocess cwd, so the Read tool allows them without an interactive permission prompt.
+    static var sandboxDirectory: URL {
         let dir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
             .appendingPathComponent("AiWritingTools/sandbox")
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)

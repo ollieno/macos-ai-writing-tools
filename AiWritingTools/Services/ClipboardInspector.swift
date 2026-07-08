@@ -37,10 +37,14 @@ struct ClipboardInspector {
             return nil
         }
 
-        let path = NSTemporaryDirectory() + "aiwritingtools-\(UUID().uuidString).png"
+        // Write into the CLI sandbox directory (the subprocess cwd) rather than the
+        // system temp dir, so Claude's Read tool can access the image without an
+        // interactive permission prompt (paths outside the cwd are blocked in -p mode).
+        let url = ClaudeCodeBridge.sandboxDirectory
+            .appendingPathComponent("aiwritingtools-\(UUID().uuidString).png")
         do {
-            try pngData.write(to: URL(fileURLWithPath: path))
-            return path
+            try pngData.write(to: url)
+            return url.path
         } catch {
             return nil
         }
