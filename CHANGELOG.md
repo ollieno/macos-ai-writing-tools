@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.2] - 2026-07-08
+
+### Fixed
+- Restore Claude CLI login inside the isolated HOME: pass USER/LOGNAME so the macOS Security framework can unlock the login Keychain, and stop shadowing the Keychain with a stale `.credentials.json`, which surfaced as "Not logged in"
+
 ## [1.5.1] - 2026-07-08
 
 ### Fixed
