@@ -46,6 +46,33 @@ final class ClaudeCodeBridge {
         let claudeDir = isolatedHomeDirectory.appendingPathComponent(".claude")
         try fm.createDirectory(at: claudeDir, withIntermediateDirectories: true)
         try ensureCredentials(in: claudeDir)
+        try ensureKeychainAccess()
+    }
+
+    /// Symlinks `<isolated-home>/Library/Keychains` to the real
+    /// `~/Library/Keychains`. Claude CLI stores and refreshes its OAuth tokens in
+    /// the macOS login Keychain, whose location the Security framework resolves
+    /// from `$HOME`. Without this link the isolated HOME has no Keychains
+    /// directory, so a token refresh write fails with the system dialog
+    /// "A keychain cannot be found to store". Sharing the directory lets refreshes
+    /// land in the real login Keychain, in sync with the host CLI.
+    private static func ensureKeychainAccess() throws {
+        let fm = FileManager.default
+        let realKeychains = URL(fileURLWithPath: NSHomeDirectory())
+            .appendingPathComponent("Library/Keychains")
+        guard fm.fileExists(atPath: realKeychains.path) else { return }
+
+        let isolatedLibrary = isolatedHomeDirectory.appendingPathComponent("Library")
+        try fm.createDirectory(at: isolatedLibrary, withIntermediateDirectories: true)
+        let linkURL = isolatedLibrary.appendingPathComponent("Keychains")
+
+        if (try? fm.destinationOfSymbolicLink(atPath: linkURL.path)) == realKeychains.path {
+            return
+        }
+        if fm.fileExists(atPath: linkURL.path) || (try? fm.destinationOfSymbolicLink(atPath: linkURL.path)) != nil {
+            try fm.removeItem(at: linkURL)
+        }
+        try fm.createSymbolicLink(at: linkURL, withDestinationURL: realKeychains)
     }
 
     /// Ensures `<isolated-home>/.claude/.credentials.json` resolves to a usable
