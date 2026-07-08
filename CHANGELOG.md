@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.5.3] - 2026-07-08
+
+### Fixed
+- Image actions no longer fail with "I don't have permission to access that file": the pasted image is written into the CLI sandbox directory so Claude's Read tool can access it
+
 ## [1.5.2] - 2026-07-08
 
 ### Fixed
